@@ -7,6 +7,12 @@ import { Activity, PackingItem, TravelDetails } from "@/types/types";
 import { calculateTotalWeight } from "@/utils/calculations";
 import { Briefcase, Mountain, Backpack, Wind, Waves, Heart, Tent, Camera, Utensils, Snowflake } from "lucide-react";
 
+interface ActivitySelectionProps {
+  travelDetails: TravelDetails;
+  onNext: (items: PackingItem[]) => void;
+  onBack: () => void;
+}
+
 const ACTIVITIES = [
   { 
     id: "hiking", 
