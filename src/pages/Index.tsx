@@ -3,9 +3,10 @@ import InitialForm from "@/components/InitialForm";
 import ActivitySelection from "@/components/ActivitySelection";
 import PackingListReview from "@/components/PackingListReview";
 import FinalPackingList from "@/components/FinalPackingList";
+import CompletionPage from "@/components/CompletionPage";
 import { PackingItem, TravelDetails } from "@/types/types";
 
-type Step = "initial" | "activities" | "review" | "final";
+type Step = "initial" | "activities" | "review" | "final" | "completion";
 
 const Index = () => {
   const [step, setStep] = useState<Step>("initial");
@@ -25,6 +26,10 @@ const Index = () => {
   const handleReviewSubmit = (items: PackingItem[]) => {
     setSelectedItems(items);
     setStep("final");
+  };
+
+  const handleFinalComplete = () => {
+    setStep("completion");
   };
 
   if (!travelDetails && step !== "initial") {
@@ -62,6 +67,12 @@ const Index = () => {
           <FinalPackingList
             items={selectedItems}
             onBack={() => setStep("review")}
+            onComplete={handleFinalComplete}
+          />
+        )}
+        {step === "completion" && (
+          <CompletionPage
+            onBack={() => setStep("final")}
           />
         )}
       </div>
