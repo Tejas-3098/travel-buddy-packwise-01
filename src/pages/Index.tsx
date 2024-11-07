@@ -17,8 +17,10 @@ const Index = () => {
 
   const fetchWeatherSuggestions = async (city: string, startDate: string, endDate: string) => {
     try {
-      const response = await fetch(`/api/packing-suggestions?city=${encodeURIComponent(city)}&startDate=${startDate}&endDate=${endDate}`);
-      if (!response.ok) throw new Error('Failed to fetch weather suggestions');
+      const response = await fetch(`http://localhost:5001/api/packing-suggestions?city=${encodeURIComponent(city)}&startDate=${startDate}&endDate=${endDate}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch weather suggestions');
+      }
       const data = await response.json();
       
       // Convert weather suggestions to PackingItem format
