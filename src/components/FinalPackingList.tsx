@@ -7,9 +7,10 @@ import { PackingItem } from "@/types/types";
 interface FinalPackingListProps {
   items: PackingItem[];
   onBack: () => void;
+  onComplete: () => void;
 }
 
-const FinalPackingList = ({ items, onBack }: FinalPackingListProps) => {
+const FinalPackingList = ({ items, onBack, onComplete }: FinalPackingListProps) => {
   const [packedItems, setPackedItems] = useState<Set<string>>(new Set());
 
   const togglePacked = (itemId: string) => {
@@ -55,9 +56,12 @@ const FinalPackingList = ({ items, onBack }: FinalPackingListProps) => {
         ))}
       </div>
 
-      <div className="flex justify-center pt-4">
+      <div className="flex justify-between pt-4">
         <Button variant="outline" onClick={onBack}>
           Back to Review
+        </Button>
+        <Button onClick={onComplete}>
+          Complete Packing
         </Button>
       </div>
     </div>
