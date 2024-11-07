@@ -34,6 +34,11 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-primary mb-2">Travel Buddy</h1>
+          <p className="text-lg text-gray-600 italic">"Pack Smart, Travel Light, Adventure Right"</p>
+        </div>
+
         {step === "initial" && (
           <InitialForm onSubmit={handleInitialSubmit} />
         )}
