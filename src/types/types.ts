@@ -11,13 +11,19 @@ export interface Activity {
   items: PackingItem[];
 }
 
-export interface PackingItem {
-  id: string;
-  name: string;
-  weight: number;
-  unit: "kg" | "lb";
+export interface PackingItem extends EssentialItem {
   category: "essential" | "activity" | "weather";
   packed: boolean;
+  quantity?: number;
+}
+
+export interface TravelDetails {
+  weightLimit: number;
+  unit: "kg" | "lb";
+  essentials: EssentialItem[];
+  destination: string;
+  startDate: string;
+  endDate: string;
 }
 
 export interface PackingList {

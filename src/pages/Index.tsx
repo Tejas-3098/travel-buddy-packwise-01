@@ -1,27 +1,63 @@
 import { useState } from "react";
 import InitialForm from "@/components/InitialForm";
-import { PackingList, EssentialItem } from "@/types/types";
+import ActivitySelection from "@/components/ActivitySelection";
+import PackingListReview from "@/components/PackingListReview";
+import FinalPackingList from "@/components/FinalPackingList";
+import { PackingItem, TravelDetails } from "@/types/types";
+
+type Step = "initial" | "activities" | "review" | "final";
 
 const Index = () => {
-  const [packingList, setPackingList] = useState<PackingList | null>(null);
+  const [step, setStep] = useState<Step>("initial");
+  const [travelDetails, setTravelDetails] = useState<TravelDetails | null>(null);
+  const [selectedItems, setSelectedItems] = useState<PackingItem[]>([]);
 
-  const handleInitialSubmit = (weightLimit: number, unit: "kg" | "lb", essentials: EssentialItem[]) => {
-    setPackingList({
-      essentialItems: essentials,
-      activities: [],
-      totalWeight: 0,
-      weightLimit,
-      unit,
-    });
+  const handleInitialSubmit = (details: TravelDetails) => {
+    setTravelDetails(details);
+    setStep("activities");
   };
+
+  const handleActivitySubmit = (items: PackingItem[]) => {
+    setSelectedItems(items);
+    setStep("review");
+  };
+
+  const handleReviewSubmit = (items: PackingItem[]) => {
+    setSelectedItems(items);
+    setStep("final");
+  };
+
+  if (!travelDetails && step !== "initial") {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container">
-        {!packingList ? (
+        {step === "initial" && (
           <InitialForm onSubmit={handleInitialSubmit} />
-        ) : (
-          <div>Activity selection coming in next iteration</div>
+        )}
+        {step === "activities" && travelDetails && (
+          <ActivitySelection
+            travelDetails={travelDetails}
+            onNext={handleActivitySubmit}
+            onBack={() => setStep("initial")}
+          />
+        )}
+        {step === "review" && travelDetails && (
+          <PackingListReview
+            items={selectedItems}
+            weightLimit={travelDetails.weightLimit}
+            unit={travelDetails.unit}
+            onNext={handleReviewSubmit}
+            onBack={() => setStep("activities")}
+          />
+        )}
+        {step === "final" && (
+          <FinalPackingList
+            items={selectedItems}
+            onBack={() => setStep("review")}
+          />
         )}
       </div>
     </div>

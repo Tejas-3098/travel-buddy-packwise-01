@@ -4,17 +4,20 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Plus, Trash2 } from "lucide-react";
-import { EssentialItem } from "@/types/types";
+import { EssentialItem, TravelDetails } from "@/types/types";
 import { isWeightValid } from "@/utils/calculations";
 import { useToast } from "@/components/ui/use-toast";
 
 interface InitialFormProps {
-  onSubmit: (weightLimit: number, unit: "kg" | "lb", essentials: EssentialItem[]) => void;
+  onSubmit: (details: TravelDetails) => void;
 }
 
 const InitialForm = ({ onSubmit }: InitialFormProps) => {
   const [weightLimit, setWeightLimit] = useState("");
   const [unit, setUnit] = useState<"kg" | "lb">("kg");
+  const [destination, setDestination] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [essentials, setEssentials] = useState<EssentialItem[]>([]);
   const [newItem, setNewItem] = useState({ name: "", weight: "" });
   const { toast } = useToast();
@@ -64,7 +67,32 @@ const InitialForm = ({ onSubmit }: InitialFormProps) => {
       return;
     }
 
-    onSubmit(limit, unit, essentials);
+    if (!destination || !startDate || !endDate) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all travel details",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (new Date(startDate) > new Date(endDate)) {
+      toast({
+        title: "Invalid Dates",
+        description: "Start date must be before end date",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    onSubmit({
+      weightLimit: limit,
+      unit,
+      essentials,
+      destination,
+      startDate,
+      endDate,
+    });
   };
 
   return (
@@ -72,6 +100,37 @@ const InitialForm = ({ onSubmit }: InitialFormProps) => {
       <h2 className="text-2xl font-bold text-center text-primary">Welcome to Travel Buddy</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="destination">Destination City</Label>
+          <Input
+            id="destination"
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}
+            placeholder="Enter destination city"
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="startDate">Start Date</Label>
+            <Input
+              id="startDate"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="endDate">End Date</Label>
+            <Input
+              id="endDate"
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
+        </div>
+
         <div className="space-y-2">
           <Label htmlFor="weightLimit">Total weight limit</Label>
           <div className="flex gap-2">
