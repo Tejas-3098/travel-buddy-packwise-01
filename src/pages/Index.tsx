@@ -4,15 +4,17 @@ import ActivitySelection from "@/components/ActivitySelection";
 import PackingListReview from "@/components/PackingListReview";
 import FinalPackingList from "@/components/FinalPackingList";
 import CompletionPage from "@/components/CompletionPage";
+import WeatherSuggestions from "@/components/WeatherSuggestions";
 import { PackingItem, TravelDetails } from "@/types/types";
 import { useToast } from "@/components/ui/use-toast";
 
-type Step = "initial" | "activities" | "review" | "final" | "completion";
+type Step = "initial" | "weather" | "activities" | "review" | "final" | "completion";
 
 const Index = () => {
   const [step, setStep] = useState<Step>("initial");
   const [travelDetails, setTravelDetails] = useState<TravelDetails | null>(null);
   const [selectedItems, setSelectedItems] = useState<PackingItem[]>([]);
+  const [weatherItems, setWeatherItems] = useState<PackingItem[]>([]);
   const { toast } = useToast();
 
   const fetchWeatherSuggestions = async (city: string, startDate: string, endDate: string) => {
@@ -23,8 +25,7 @@ const Index = () => {
       }
       const data = await response.json();
       
-      // Convert weather suggestions to PackingItem format
-      const weatherItems: PackingItem[] = data.itemSuggestions.map((item: any) => ({
+      const items: PackingItem[] = data.itemSuggestions.map((item: any) => ({
         ...item,
         category: "weather",
         packed: false,
@@ -36,7 +37,7 @@ const Index = () => {
         description: data.message,
       });
 
-      return weatherItems;
+      return items;
     } catch (error) {
       console.error('Error fetching weather suggestions:', error);
       toast({
@@ -50,18 +51,24 @@ const Index = () => {
 
   const handleInitialSubmit = async (details: TravelDetails) => {
     setTravelDetails(details);
-    const weatherItems = await fetchWeatherSuggestions(
+    const items = await fetchWeatherSuggestions(
       details.destination,
       details.startDate,
       details.endDate
     );
-    setSelectedItems([...details.essentials.map(item => ({
+    
+    setWeatherItems(items);
+    setSelectedItems(details.essentials.map(item => ({
       ...item,
       category: "essential" as const,
       packed: false,
       quantity: 1
-    })), ...weatherItems]);
-    setStep("activities");
+    })));
+    setStep("weather");
+  };
+
+  const handleAddWeatherItem = (item: PackingItem) => {
+    setSelectedItems(prev => [...prev, item]);
   };
 
   const handleActivitySubmit = (items: PackingItem[]) => {
@@ -93,11 +100,21 @@ const Index = () => {
         {step === "initial" && (
           <InitialForm onSubmit={handleInitialSubmit} />
         )}
+        {step === "weather" && travelDetails && (
+          <WeatherSuggestions
+            weatherItems={weatherItems}
+            selectedItems={selectedItems}
+            travelDetails={travelDetails}
+            onAddItem={handleAddWeatherItem}
+            onNext={() => setStep("activities")}
+            onBack={() => setStep("initial")}
+          />
+        )}
         {step === "activities" && travelDetails && (
           <ActivitySelection
             travelDetails={travelDetails}
             onNext={handleActivitySubmit}
-            onBack={() => setStep("initial")}
+            onBack={() => setStep("weather")}
           />
         )}
         {step === "review" && travelDetails && (
