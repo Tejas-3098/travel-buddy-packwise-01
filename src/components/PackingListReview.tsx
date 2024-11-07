@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Plus, Minus, Trash2 } from "lucide-react";
 import WeightIndicator from "./WeightIndicator";
 import { PackingItem } from "@/types/types";
 import { calculateTotalWeight } from "@/utils/calculations";
+import { useToast } from "@/components/ui/use-toast";
 
 interface PackingListReviewProps {
   items: PackingItem[];
@@ -17,20 +17,32 @@ interface PackingListReviewProps {
 
 const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onBack }: PackingListReviewProps) => {
   const [items, setItems] = useState<PackingItem[]>(initialItems);
+  const { toast } = useToast();
+  const totalWeight = calculateTotalWeight(items, unit);
+
+  useEffect(() => {
+    if (totalWeight > weightLimit) {
+      toast({
+        title: "Weight Limit Exceeded",
+        description: `Your total weight (${totalWeight.toFixed(1)} ${unit}) exceeds the limit of ${weightLimit} ${unit}`,
+        variant: "destructive",
+      });
+    }
+  }, [totalWeight, weightLimit, unit, toast]);
 
   const handleQuantityChange = (itemId: string, delta: number) => {
-    setItems(items.map(item => 
-      item.id === itemId
-        ? { ...item, quantity: Math.max(1, (item.quantity || 1) + delta) }
-        : item
-    ));
+    setItems(items.map(item => {
+      if (item.id === itemId) {
+        const newQuantity = Math.max(1, (item.quantity || 1) + delta);
+        return { ...item, quantity: newQuantity };
+      }
+      return item;
+    }));
   };
 
   const handleRemoveItem = (itemId: string) => {
     setItems(items.filter(item => item.id !== itemId));
   };
-
-  const totalWeight = calculateTotalWeight(items, unit);
 
   return (
     <Card className="p-6 max-w-2xl mx-auto space-y-6">
@@ -43,7 +55,7 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
       />
 
       <div className="space-y-4">
-        {["essential", "activity"].map((category) => (
+        {["essential", "activity", "weather"].map((category) => (
           <div key={category} className="space-y-2">
             <h3 className="font-semibold capitalize">{category} Items</h3>
             <div className="space-y-2">
@@ -54,7 +66,7 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
                     <span>{item.name}</span>
                     <div className="flex items-center gap-4">
                       <span className="text-sm text-gray-600">
-                        {item.weight * (item.quantity || 1)} {item.unit}
+                        {(item.weight * (item.quantity || 1)).toFixed(1)} {item.unit}
                       </span>
                       <div className="flex items-center gap-2">
                         <Button
