@@ -51,7 +51,6 @@ const Index = () => {
   };
 
   const handleInitialSubmit = async (details: TravelDetails) => {
-    setTravelDetails(details);
     const items = await fetchWeatherSuggestions(
       details.destination,
       details.startDate,
@@ -59,6 +58,10 @@ const Index = () => {
     );
     
     setWeatherItems(items);
+    setTravelDetails({
+      ...details,
+      weatherItems: items
+    });
     setSelectedItems(details.essentials.map(item => ({
       ...item,
       category: "essential" as const,
@@ -70,6 +73,14 @@ const Index = () => {
 
   const handleAddWeatherItem = (item: PackingItem) => {
     setSelectedItems(prev => [...prev, item]);
+    setTravelDetails(prev => {
+      if (!prev) return prev;
+      const updatedWeatherItems = [...(prev.weatherItems || []), item];
+      return {
+        ...prev,
+        weatherItems: updatedWeatherItems
+      };
+    });
   };
 
   const handleActivitySubmit = (items: PackingItem[]) => {

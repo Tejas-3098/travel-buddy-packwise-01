@@ -5,9 +5,8 @@ import { Label } from "@/components/ui/label";
 import WeightIndicator from "./WeightIndicator";
 import { Activity, PackingItem, TravelDetails } from "@/types/types";
 import { calculateTotalWeight } from "@/utils/calculations";
-import { Briefcase, Mountain, Backpack, Wind, Waves, Heart, Tent, Camera, Utensils, Snowflake } from "lucide-react";
-import ActivityList from "./activities/ActivityList";
 import { ACTIVITIES } from "./activities/activityData";
+import ActivityList from "./activities/ActivityList";
 
 interface ActivitySelectionProps {
   travelDetails: TravelDetails;
@@ -17,23 +16,22 @@ interface ActivitySelectionProps {
 
 const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionProps) => {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
-  const [selectedItems, setSelectedItems] = useState<PackingItem[]>(
-    [...travelDetails.essentials.map(item => ({
+  const [selectedItems, setSelectedItems] = useState<PackingItem[]>([
+    ...travelDetails.essentials.map(item => ({
       ...item,
       category: "essential" as const,
       packed: false,
       quantity: 1,
     })),
-    ...travelDetails.weatherItems || []  // Include weather items if they exist
-    ]
-  );
+    ...(travelDetails.weatherItems || [])
+  ]);
 
   const handleActivityToggle = (activityId: string) => {
     if (selectedActivities.includes(activityId)) {
       setSelectedActivities(selectedActivities.filter(id => id !== activityId));
       setSelectedItems(selectedItems.filter(item => 
         item.category === "essential" || 
-        item.category === "weather" ||  // Keep weather items
+        item.category === "weather" ||
         !ACTIVITIES.find(a => a.id === activityId)?.items.some(i => i.id === item.id)
       ));
     } else {
@@ -41,10 +39,7 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
       const activity = ACTIVITIES.find(a => a.id === activityId);
       if (activity) {
         const newItems = activity.items.map(item => ({
-          id: item.id,
-          name: item.name,
-          weight: item.weight,
-          unit: item.unit,
+          ...item,
           category: "activity" as const,
           packed: false,
           quantity: 1,
