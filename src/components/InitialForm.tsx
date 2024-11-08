@@ -7,6 +7,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { EssentialItem, TravelDetails } from "@/types/types";
 import { isWeightValid } from "@/utils/calculations";
 import { useToast } from "@/components/ui/use-toast";
+import WeightInput from "@/components/essentials/WeightInput";
 
 interface InitialFormProps {
   onSubmit: (details: TravelDetails) => void;
@@ -161,13 +162,13 @@ const InitialForm = ({ onSubmit }: InitialFormProps) => {
               value={newItem.name}
               onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
             />
-            <Input
-              type="number"
-              placeholder="Weight"
-              value={newItem.weight}
-              onChange={(e) => setNewItem({ ...newItem, weight: e.target.value })}
-              className="w-24"
-            />
+            <div className="w-32">
+              <WeightInput
+                value={newItem.weight}
+                unit={unit}
+                onChange={(value) => setNewItem({ ...newItem, weight: value })}
+              />
+            </div>
             <Button type="button" onClick={handleAddEssential} size="icon">
               <Plus className="h-4 w-4" />
             </Button>
