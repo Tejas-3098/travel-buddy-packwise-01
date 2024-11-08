@@ -7,6 +7,7 @@ import { calculateTripDuration } from "@/utils/dateUtils";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 interface WeatherSuggestionsProps {
   weatherItems: PackingItem[];
@@ -25,6 +26,7 @@ const WeatherSuggestions = ({
   onNext,
   onBack,
 }: WeatherSuggestionsProps) => {
+  const { toast } = useToast();
   const totalWeight = calculateTotalWeight(selectedItems, travelDetails.unit);
   const tripDuration = calculateTripDuration(travelDetails.startDate, travelDetails.endDate);
   
@@ -45,10 +47,26 @@ const WeatherSuggestions = ({
 
   const handleAddItem = (item: PackingItem) => {
     const quantity = quantities[item.id];
+    const newWeight = totalWeight + (item.weight * quantity);
+    
+    if (newWeight > travelDetails.weightLimit) {
+      toast({
+        title: "Weight Limit Exceeded",
+        description: `Adding this item would exceed your weight limit of ${travelDetails.weightLimit}${travelDetails.unit}`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     onAddItem({
       ...item,
       quantity,
       weight: item.weight * quantity
+    });
+
+    toast({
+      title: "Item Added",
+      description: `Added ${quantity} ${item.name} to your bag`,
     });
   };
 
