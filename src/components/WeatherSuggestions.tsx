@@ -94,6 +94,10 @@ const WeatherSuggestions = ({
     });
   };
 
+  const isItemAdded = (itemId: string) => {
+    return selectedItems.some(item => item.id === itemId);
+  };
+
   return (
     <Card className="p-6 max-w-2xl mx-auto space-y-6">
       <h2 className="text-2xl font-bold text-center text-primary">Weather-Based Suggestions</h2>
@@ -137,7 +141,7 @@ const WeatherSuggestions = ({
         <h3 className="text-lg font-semibold text-primary">Suggested Items</h3>
         <div className="grid gap-4">
           {weatherItems.map((item) => {
-            const isAdded = selectedItems.some((selected) => selected.id === item.id);
+            const isAdded = isItemAdded(item.id);
             const quantity = quantities[item.id] || 1;
             
             return (
