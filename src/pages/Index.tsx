@@ -72,14 +72,19 @@ const Index = () => {
   };
 
   const handleAddWeatherItem = (item: PackingItem) => {
-    setSelectedItems(prev => [...prev, item]);
-    setTravelDetails(prev => {
-      if (!prev) return prev;
-      const updatedWeatherItems = [...(prev.weatherItems || []), item];
-      return {
-        ...prev,
-        weatherItems: updatedWeatherItems
-      };
+    setSelectedItems(prev => {
+      const existingItemIndex = prev.findIndex(i => i.id === item.id);
+      if (existingItemIndex !== -1) {
+        // Update existing item's quantity
+        const updatedItems = [...prev];
+        updatedItems[existingItemIndex] = {
+          ...updatedItems[existingItemIndex],
+          quantity: item.quantity
+        };
+        return updatedItems;
+      }
+      // Add new item
+      return [...prev, item];
     });
   };
 

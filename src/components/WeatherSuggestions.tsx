@@ -4,7 +4,6 @@ import WeightIndicator from "./WeightIndicator";
 import { PackingItem, TravelDetails } from "@/types/types";
 import { calculateTotalWeight } from "@/utils/calculations";
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
 import WeatherForecast from "./weather/WeatherForecast";
 import WeatherItem from "./weather/WeatherItem";
 
@@ -25,7 +24,6 @@ const WeatherSuggestions = ({
   onNext,
   onBack,
 }: WeatherSuggestionsProps) => {
-  const { toast } = useToast();
   const totalWeight = calculateTotalWeight(selectedItems, travelDetails.unit);
   
   const [quantities, setQuantities] = useState<Record<string, number>>(() => {
@@ -37,10 +35,6 @@ const WeatherSuggestions = ({
     return initial;
   });
 
-  const weatherInfo = weatherItems[0]?.message || "";
-  const temperatureMatch = weatherInfo.match(/temperature of (-?\d+\.?\d*)°C/);
-  const temperature = temperatureMatch ? temperatureMatch[1] : null;
-
   const handleQuantityChange = (itemId: string, delta: number) => {
     setQuantities(prev => ({
       ...prev,
@@ -51,15 +45,9 @@ const WeatherSuggestions = ({
   const handleAddItem = (item: PackingItem) => {
     const quantity = quantities[item.id];
     const totalItemWeight = item.weight * quantity;
-    const existingItemIndex = selectedItems.findIndex(selected => selected.id === item.id);
     const newTotalWeight = totalWeight + totalItemWeight;
     
     if (newTotalWeight > travelDetails.weightLimit) {
-      toast({
-        title: "Weight Limit Exceeded",
-        description: `Adding this item would exceed your weight limit of ${travelDetails.weightLimit}${travelDetails.unit}`,
-        variant: "destructive",
-      });
       return;
     }
 
@@ -70,23 +58,16 @@ const WeatherSuggestions = ({
       packed: false
     };
 
-    if (existingItemIndex !== -1) {
-      const updatedItems = [...selectedItems];
-      updatedItems[existingItemIndex] = newItem;
-      onAddItem(newItem);
-    } else {
-      onAddItem(newItem);
-    }
-
-    toast({
-      title: "Item Added",
-      description: `Added ${quantity} ${item.name} to your bag`,
-    });
+    onAddItem(newItem);
   };
 
   const isItemAdded = (itemId: string) => {
     return selectedItems.some(item => item.id === itemId);
   };
+
+  const weatherInfo = weatherItems[0]?.message || "";
+  const temperatureMatch = weatherInfo.match(/temperature of (-?\d+\.?\d*)°C/);
+  const temperature = temperatureMatch ? temperatureMatch[1] : null;
 
   return (
     <Card className="p-6 max-w-2xl mx-auto space-y-6">
