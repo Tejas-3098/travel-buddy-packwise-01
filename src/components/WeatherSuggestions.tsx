@@ -147,9 +147,10 @@ const WeatherSuggestions = ({
           From {travelDetails.startDate} to {travelDetails.endDate}
         </p>
         <p className="text-blue-700 mt-3 font-medium">
-          Expected Weather: {weatherItems[0]?.category === "weather" ? 
-            `Predominantly ${weatherItems[0].name.split(' ')[0]} conditions` : 
-            "Weather data loading..."}
+          The weather in {travelDetails.destination} would be predominantly {weatherItems[0]?.category === "weather" ? 
+            weatherItems[0].name.toLowerCase().split(' ')[0] : "loading"} with an average temperature of {
+              weatherItems[0]?.weight ? `${Math.round(weatherItems[0].weight)}°C` : "..."
+            }
         </p>
       </motion.div>
       
