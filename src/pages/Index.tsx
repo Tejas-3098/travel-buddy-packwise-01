@@ -34,9 +34,15 @@ const Index = () => {
       if (!response.ok) {
         throw new Error('Failed to fetch weather data');
       }
-      return response.json();
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      return data;
     } catch (error) {
-      throw new Error('Failed to fetch weather data. Please try again.');
+      console.error('Error fetching weather data:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to fetch weather data');
+      throw error;
     }
   };
 

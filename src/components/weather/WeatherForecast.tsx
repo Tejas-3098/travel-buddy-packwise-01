@@ -13,19 +13,15 @@ const WeatherForecast = ({ weatherInfo, temperature, travelDetails }: WeatherFor
   const tripDuration = calculateTripDuration(travelDetails.startDate, travelDetails.endDate);
 
   const getWeatherIcon = (condition: string) => {
-    switch (condition.toLowerCase()) {
-      case 'sunny':
-      case 'clear':
-        return <Sun className="h-6 w-6 text-yellow-500" />;
-      case 'rainy':
-      case 'rain':
-        return <CloudRain className="h-6 w-6 text-blue-500" />;
-      case 'snowy':
-      case 'snow':
-        return <Snowflake className="h-6 w-6 text-blue-300" />;
-      default:
-        return <Cloud className="h-6 w-6 text-gray-500" />;
+    const lowerCondition = condition.toLowerCase();
+    if (lowerCondition.includes('sunny') || lowerCondition.includes('clear')) {
+      return <Sun className="h-6 w-6 text-yellow-500" />;
+    } else if (lowerCondition.includes('rain')) {
+      return <CloudRain className="h-6 w-6 text-blue-500" />;
+    } else if (lowerCondition.includes('snow')) {
+      return <Snowflake className="h-6 w-6 text-blue-300" />;
     }
+    return <Cloud className="h-6 w-6 text-gray-500" />;
   };
 
   return (
@@ -43,7 +39,7 @@ const WeatherForecast = ({ weatherInfo, temperature, travelDetails }: WeatherFor
             Your {tripDuration}-day trip to <span className="font-semibold">{travelDetails.destination}</span>
           </p>
           <p className="text-blue-700 mt-1">
-            From {travelDetails.startDate} to {travelDetails.endDate}
+            From {new Date(travelDetails.startDate).toLocaleDateString()} to {new Date(travelDetails.endDate).toLocaleDateString()}
           </p>
           <div className="flex items-center gap-2 mt-3">
             <Thermometer className="h-5 w-5 text-red-500" />
