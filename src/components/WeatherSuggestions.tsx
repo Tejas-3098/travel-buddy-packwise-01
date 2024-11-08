@@ -6,7 +6,7 @@ import { calculateTotalWeight } from "@/utils/calculations";
 import { calculateTripDuration } from "@/utils/dateUtils";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, Sun, Cloud, CloudRain, Snowflake } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface WeatherSuggestionsProps {
@@ -33,10 +33,22 @@ const WeatherSuggestions = ({
   const [quantities, setQuantities] = useState<Record<string, number>>(() => {
     const initial: Record<string, number> = {};
     weatherItems.forEach(item => {
-      initial[item.id] = item.type === "shoes" ? Math.min(3, tripDuration) : tripDuration;
+      initial[item.id] = 1;
     });
     return initial;
   });
+
+  const getWeatherIcon = (condition: string) => {
+    if (condition.toLowerCase().includes('sun') || condition.toLowerCase().includes('clear')) {
+      return <Sun className="h-6 w-6 text-yellow-500" />;
+    } else if (condition.toLowerCase().includes('rain')) {
+      return <CloudRain className="h-6 w-6 text-blue-500" />;
+    } else if (condition.toLowerCase().includes('snow')) {
+      return <Snowflake className="h-6 w-6 text-blue-300" />;
+    } else {
+      return <Cloud className="h-6 w-6 text-gray-500" />;
+    }
+  };
 
   const handleQuantityChange = (itemId: string, delta: number) => {
     setQuantities(prev => ({
@@ -70,29 +82,52 @@ const WeatherSuggestions = ({
     });
   };
 
-  const renderClothingSection = (type: "top" | "bottom" | "shoes") => {
-    const items = weatherItems.filter(item => item.type === type);
-    const typeLabel = type === "top" ? "Tops" : type === "bottom" ? "Bottoms" : "Shoes";
-    const suggestedQuantity = type === "shoes" ? Math.min(3, tripDuration) : tripDuration;
-    
-    if (items.length === 0) return null;
+  return (
+    <Card className="p-6 max-w-2xl mx-auto space-y-6">
+      <h2 className="text-2xl font-bold text-center text-primary">Weather-Based Suggestions</h2>
+      
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg shadow-sm border border-blue-200"
+      >
+        <div className="flex items-center gap-3">
+          {weatherItems[0]?.message && getWeatherIcon(weatherItems[0].message)}
+          <div>
+            <h3 className="text-lg font-semibold text-blue-800 mb-2">Weather Forecast</h3>
+            <p className="text-blue-700">
+              Your {tripDuration}-day trip to <span className="font-semibold">{travelDetails.destination}</span>
+            </p>
+            <p className="text-blue-700 mt-1">
+              From {travelDetails.startDate} to {travelDetails.endDate}
+            </p>
+            <p className="text-blue-700 mt-3 font-medium">
+              {weatherItems[0]?.message || "Loading weather information..."}
+            </p>
+          </div>
+        </div>
+      </motion.div>
+      
+      <WeightIndicator
+        currentWeight={totalWeight}
+        weightLimit={travelDetails.weightLimit}
+        unit={travelDetails.unit}
+      />
 
-    return (
-      <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-primary">
-          {typeLabel} (Suggested: {suggestedQuantity})
-        </h3>
-        <div className="space-y-2">
-          {items.map((item) => {
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-primary">Suggested Items</h3>
+        <div className="grid gap-4">
+          {weatherItems.map((item) => {
             const isAdded = selectedItems.some((selected) => selected.id === item.id);
-            const quantity = quantities[item.id] || suggestedQuantity;
+            const quantity = quantities[item.id] || 1;
             
             return (
-              <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
+              <div key={item.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <div>
                   <span className="font-medium">{item.name}</span>
                   <p className="text-sm text-gray-600">
-                    {(item.weight * quantity).toFixed(1)} {travelDetails.unit}
+                    Weight: {(item.weight * quantity).toFixed(1)} {travelDetails.unit}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -117,6 +152,7 @@ const WeatherSuggestions = ({
                     variant={isAdded ? "secondary" : "default"}
                     onClick={() => !isAdded && handleAddItem(item)}
                     disabled={isAdded}
+                    className="min-w-[100px]"
                   >
                     {isAdded ? "Added" : "Add to Bag"}
                   </Button>
@@ -125,42 +161,6 @@ const WeatherSuggestions = ({
             );
           })}
         </div>
-      </div>
-    );
-  };
-
-  return (
-    <Card className="p-6 max-w-2xl mx-auto space-y-6">
-      <h2 className="text-2xl font-bold text-center text-primary">Weather-Based Suggestions</h2>
-      
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg shadow-sm border border-blue-200"
-      >
-        <h3 className="text-lg font-semibold text-blue-800 mb-2">Weather Forecast</h3>
-        <p className="text-blue-700">
-          Your {tripDuration}-day trip to <span className="font-semibold">{travelDetails.destination}</span>
-        </p>
-        <p className="text-blue-700 mt-1">
-          From {travelDetails.startDate} to {travelDetails.endDate}
-        </p>
-        <p className="text-blue-700 mt-3 font-medium">
-          {weatherItems[0]?.message || "Loading weather information..."}
-        </p>
-      </motion.div>
-      
-      <WeightIndicator
-        currentWeight={totalWeight}
-        weightLimit={travelDetails.weightLimit}
-        unit={travelDetails.unit}
-      />
-
-      <div className="space-y-6">
-        {renderClothingSection("top")}
-        {renderClothingSection("bottom")}
-        {renderClothingSection("shoes")}
       </div>
 
       <div className="flex justify-between pt-4">
