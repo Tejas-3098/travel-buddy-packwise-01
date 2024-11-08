@@ -49,7 +49,10 @@ const AuthScreen = () => {
             }
           }}
           providers={["google", "facebook"]}
+          view="sign_in"
+          showLinks={true}
           redirectTo={`${window.location.origin}/form`}
+          onlyThirdPartyProviders={false}
         />
       </Card>
     </motion.div>
