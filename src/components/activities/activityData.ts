@@ -4,7 +4,7 @@ export const ACTIVITIES = [
   { 
     id: "hiking", 
     name: "Hiking", 
-    icon: <Mountain className="h-5 w-5" />,
+    icon: Mountain,
     items: [
       { id: "boots", name: "Hiking Boots", weight: 1.5, unit: "kg" },
       { id: "backpack", name: "Day Backpack", weight: 0.5, unit: "kg" },
@@ -14,7 +14,7 @@ export const ACTIVITIES = [
   { 
     id: "beach", 
     name: "Beach", 
-    icon: <Waves className="h-5 w-5" />,
+    icon: Waves,
     items: [
       { id: "swimsuit", name: "Swimsuit", weight: 0.2, unit: "kg" },
       { id: "sunscreen", name: "Sunscreen", weight: 0.3, unit: "kg" },
@@ -24,7 +24,7 @@ export const ACTIVITIES = [
   { 
     id: "formal", 
     name: "Formal Event", 
-    icon: <Heart className="h-5 w-5" />,
+    icon: Heart,
     items: [
       { id: "suit", name: "Suit/Dress", weight: 1.0, unit: "kg" },
       { id: "shoes", name: "Formal Shoes", weight: 0.8, unit: "kg" },
@@ -34,7 +34,7 @@ export const ACTIVITIES = [
   { 
     id: "business", 
     name: "Business", 
-    icon: <Briefcase className="h-5 w-5" />,
+    icon: Briefcase,
     items: [
       { id: "laptop", name: "Laptop & Charger", weight: 2.0, unit: "kg" },
       { id: "documents", name: "Documents", weight: 0.5, unit: "kg" },
@@ -44,7 +44,7 @@ export const ACTIVITIES = [
   { 
     id: "backpacking", 
     name: "Backpacking", 
-    icon: <Backpack className="h-5 w-5" />,
+    icon: Backpack,
     items: [
       { id: "sleepingbag", name: "Sleeping Bag", weight: 1.5, unit: "kg" },
       { id: "tent", name: "Lightweight Tent", weight: 2.0, unit: "kg" },
@@ -54,7 +54,7 @@ export const ACTIVITIES = [
   { 
     id: "paragliding", 
     name: "Paragliding", 
-    icon: <Wind className="h-5 w-5" />,
+    icon: Wind,
     items: [
       { id: "helmet", name: "Helmet", weight: 0.8, unit: "kg" },
       { id: "gloves", name: "Gloves", weight: 0.2, unit: "kg" },
@@ -64,7 +64,7 @@ export const ACTIVITIES = [
   { 
     id: "camping", 
     name: "Camping", 
-    icon: <Tent className="h-5 w-5" />,
+    icon: Tent,
     items: [
       { id: "tent", name: "Tent", weight: 3.0, unit: "kg" },
       { id: "sleepingbag", name: "Sleeping Bag", weight: 1.5, unit: "kg" },
@@ -74,7 +74,7 @@ export const ACTIVITIES = [
   { 
     id: "photography", 
     name: "Photography", 
-    icon: <Camera className="h-5 w-5" />,
+    icon: Camera,
     items: [
       { id: "camera", name: "Camera", weight: 1.5, unit: "kg" },
       { id: "lenses", name: "Extra Lenses", weight: 1.0, unit: "kg" },
@@ -84,7 +84,7 @@ export const ACTIVITIES = [
   { 
     id: "dining", 
     name: "Fine Dining", 
-    icon: <Utensils className="h-5 w-5" />,
+    icon: Utensils,
     items: [
       { id: "formalwear", name: "Formal Wear", weight: 1.0, unit: "kg" },
       { id: "dressshoes", name: "Dress Shoes", weight: 0.8, unit: "kg" },
@@ -93,7 +93,7 @@ export const ACTIVITIES = [
   { 
     id: "skiing", 
     name: "Skiing", 
-    icon: <Snowflake className="h-5 w-5" />,
+    icon: Snowflake,
     items: [
       { id: "skijacket", name: "Ski Jacket", weight: 2.0, unit: "kg" },
       { id: "skipants", name: "Ski Pants", weight: 1.5, unit: "kg" },

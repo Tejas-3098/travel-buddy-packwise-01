@@ -1,3 +1,5 @@
+import { Label } from "@/components/ui/label";
+import ActivityIcon from "./ActivityIcon";
 import { Activity } from "@/types/types";
 
 interface ActivityListProps {
@@ -22,7 +24,7 @@ const ActivityList = ({ activities, selectedActivities, onActivityToggle }: Acti
             onClick={() => onActivityToggle(activity.id)}
           >
             <div className="flex items-center gap-3 mb-3">
-              {activity.icon}
+              <ActivityIcon icon={activity.icon} />
               <h3 className="font-semibold">{activity.name}</h3>
             </div>
             <div className="space-y-1 text-sm text-gray-600">
