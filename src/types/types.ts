@@ -15,7 +15,8 @@ export interface PackingItem extends EssentialItem {
   category: "essential" | "activity" | "weather";
   type?: "top" | "bottom" | "shoes" | "accessory";
   packed: boolean;
-  quantity?: number;
+  quantity: number;
+  suggestedQuantity?: number;
 }
 
 export interface TravelDetails {
