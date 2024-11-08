@@ -2,11 +2,11 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import WeightIndicator from "./WeightIndicator";
 import { PackingItem, TravelDetails } from "@/types/types";
-import { Plus, Minus } from "lucide-react";
 import { calculateTotalWeight } from "@/utils/calculations";
 import { calculateTripDuration } from "@/utils/dateUtils";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { Plus, Minus } from "lucide-react";
 
 interface WeatherSuggestionsProps {
   weatherItems: PackingItem[];
@@ -39,7 +39,7 @@ const WeatherSuggestions = ({
   const handleQuantityChange = (itemId: string, delta: number) => {
     setQuantities(prev => ({
       ...prev,
-      [itemId]: Math.max(1, (prev[itemId] || 1) + delta)
+      [itemId]: Math.max(1, (prev[itemId] || tripDuration) + delta)
     }));
   };
 
@@ -54,15 +54,18 @@ const WeatherSuggestions = ({
 
   const renderClothingSection = (type: "top" | "bottom" | "shoes") => {
     const items = weatherItems.filter(item => item.type === type);
-    const typeLabel = type.charAt(0).toUpperCase() + type.slice(1) + 's';
+    const typeLabel = type === "top" ? "Tops" : type === "bottom" ? "Bottoms" : "Shoes";
+    const suggestedQuantity = type === "shoes" ? Math.min(3, tripDuration) : tripDuration;
     
     return (
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-primary">{typeLabel}</h3>
+        <h3 className="text-lg font-semibold text-primary">
+          {typeLabel} (Suggested: {suggestedQuantity})
+        </h3>
         <div className="space-y-2">
           {items.map((item) => {
             const isAdded = selectedItems.some((selected) => selected.id === item.id);
-            const quantity = quantities[item.id] || tripDuration;
+            const quantity = quantities[item.id] || suggestedQuantity;
             
             return (
               <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
@@ -106,6 +109,39 @@ const WeatherSuggestions = ({
     );
   };
 
+  const renderAccessories = () => {
+    const accessories = weatherItems.filter(item => item.type === "accessory");
+    if (accessories.length === 0) return null;
+
+    return (
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold text-primary">Weather-Specific Accessories</h3>
+        <div className="space-y-2">
+          {accessories.map((item) => {
+            const isAdded = selectedItems.some((selected) => selected.id === item.id);
+            return (
+              <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                <div>
+                  <span className="font-medium">{item.name}</span>
+                  <p className="text-sm text-gray-600">
+                    {item.weight.toFixed(1)} {travelDetails.unit}
+                  </p>
+                </div>
+                <Button
+                  variant={isAdded ? "secondary" : "default"}
+                  onClick={() => !isAdded && onAddItem(item)}
+                  disabled={isAdded}
+                >
+                  {isAdded ? "Added" : "Add to Bag"}
+                </Button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Card className="p-6 max-w-2xl mx-auto space-y-6">
       <h2 className="text-2xl font-bold text-center text-primary">Weather-Based Suggestions</h2>
@@ -135,6 +171,7 @@ const WeatherSuggestions = ({
         {renderClothingSection("top")}
         {renderClothingSection("bottom")}
         {renderClothingSection("shoes")}
+        {renderAccessories()}
       </div>
 
       <div className="flex justify-between pt-4">
