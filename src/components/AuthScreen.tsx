@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaGoogle, FaFacebook } from "react-icons/fa";
 
 const AuthScreen = () => {
   const [email, setEmail] = useState("");
@@ -38,6 +39,12 @@ const AuthScreen = () => {
       className="min-h-screen flex items-center justify-center bg-background p-4"
     >
       <Card className="w-full max-w-md p-6">
+        {/* App Title */}
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold text-primary mb-2">Travel Buddy</h1>
+          <p className="text-muted-foreground">Your Smart Packing Assistant</p>
+        </div>
+
         <Tabs defaultValue="login" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login">Login</TabsTrigger>
@@ -123,14 +130,16 @@ const AuthScreen = () => {
             <Button
               variant="outline"
               onClick={() => handleSocialLogin("Google")}
+              className="flex items-center justify-center"
             >
-              Google
+              <FaGoogle className="mr-2" /> Google
             </Button>
             <Button
               variant="outline"
               onClick={() => handleSocialLogin("Facebook")}
+              className="flex items-center justify-center"
             >
-              Facebook
+              <FaFacebook className="mr-2" /> Facebook
             </Button>
           </div>
         </div>

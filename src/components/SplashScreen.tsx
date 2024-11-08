@@ -27,7 +27,7 @@ const SplashScreen = () => {
           duration: 0.5,
           ease: [0.645, 0.045, 0.355, 1.000]
         }}
-        className="relative z-10"
+        className="relative z-10 flex flex-col items-center justify-center" // Added flex and centering classes
       >
         {/* App Logo */}
         <motion.div
