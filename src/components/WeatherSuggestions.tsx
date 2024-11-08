@@ -30,14 +30,7 @@ const WeatherSuggestions = ({
   // Track which items have been added to the bag
   const [addedItems, setAddedItems] = useState<Record<string, PackingItem>>({});
   
-  const [quantities, setQuantities] = useState<Record<string, number>>(() => {
-    const initial: Record<string, number> = {};
-    weatherItems.forEach(item => {
-      const existingItem = selectedItems.find(selected => selected.id === item.id);
-      initial[item.id] = existingItem?.quantity || 1;
-    });
-    return initial;
-  });
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
 
   const handleQuantityChange = (itemId: string, delta: number) => {
     setQuantities(prev => ({
@@ -47,7 +40,7 @@ const WeatherSuggestions = ({
   };
 
   const handleAddItem = (item: PackingItem) => {
-    const quantity = quantities[item.id];
+    const quantity = quantities[item.id] || 1;
     const totalItemWeight = item.weight * quantity;
     const newTotalWeight = totalWeight + totalItemWeight;
     
@@ -62,7 +55,6 @@ const WeatherSuggestions = ({
       packed: false
     };
 
-    // Update the addedItems state
     setAddedItems(prev => ({
       ...prev,
       [item.id]: newItem
@@ -72,31 +64,22 @@ const WeatherSuggestions = ({
   };
 
   const handleRemoveItem = (itemId: string) => {
-    // Remove the item from the suggested items list
-    setWeatherItems(prev => prev.filter(item => item.id !== itemId));
-    
-    // Remove from addedItems if it was added
     setAddedItems(prev => {
       const newAddedItems = { ...prev };
       delete newAddedItems[itemId];
       return newAddedItems;
     });
     
-    // Reset the quantity
     setQuantities(prev => {
       const newQuantities = { ...prev };
       delete newQuantities[itemId];
       return newQuantities;
     });
 
-    // Remove from selected items by setting quantity to 0
-    if (addedItems[itemId]) {
-      onAddItem({ ...addedItems[itemId], quantity: 0 });
-    }
+    onAddItem({ ...addedItems[itemId], quantity: 0 });
   };
 
   const handleNext = () => {
-    // Update travelDetails with the final state of weather items
     travelDetails.weatherItems = Object.values(addedItems);
     onNext();
   };
@@ -131,7 +114,6 @@ const WeatherSuggestions = ({
           {weatherItems.map((item) => {
             const isAdded = isItemAdded(item.id);
             const quantity = quantities[item.id] || 1;
-            const existingItem = selectedItems.find(selected => selected.id === item.id);
             
             return (
               <WeatherItem
@@ -140,7 +122,6 @@ const WeatherSuggestions = ({
                 quantity={quantity}
                 unit={travelDetails.unit}
                 isAdded={isAdded}
-                existingItem={existingItem}
                 onQuantityChange={handleQuantityChange}
                 onAddItem={handleAddItem}
                 onRemoveItem={handleRemoveItem}

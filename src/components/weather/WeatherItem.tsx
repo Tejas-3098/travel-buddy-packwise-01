@@ -7,7 +7,6 @@ interface WeatherItemProps {
   quantity: number;
   unit: string;
   isAdded: boolean;
-  existingItem?: PackingItem;
   onQuantityChange: (itemId: string, delta: number) => void;
   onAddItem: (item: PackingItem) => void;
   onRemoveItem: (itemId: string) => void;
@@ -18,7 +17,6 @@ const WeatherItem = ({
   quantity,
   unit,
   isAdded,
-  existingItem,
   onQuantityChange,
   onAddItem,
   onRemoveItem,
@@ -30,11 +28,6 @@ const WeatherItem = ({
         <p className="text-sm text-gray-600">
           Weight: {(item.weight * quantity).toFixed(1)} {unit}
         </p>
-        {existingItem && (
-          <p className="text-sm text-green-600">
-            Currently in bag: x{existingItem.quantity}
-          </p>
-        )}
       </div>
       <div className="flex items-center gap-2">
         <Button
