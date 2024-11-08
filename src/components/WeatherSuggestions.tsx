@@ -74,7 +74,8 @@ const WeatherSuggestions = ({
     const newItem = {
       ...item,
       quantity,
-      weight: itemWeight
+      weight: item.weight,  // Keep original weight per item
+      category: "weather" as const
     };
 
     onAddItem(newItem);

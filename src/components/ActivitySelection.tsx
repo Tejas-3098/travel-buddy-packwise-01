@@ -131,7 +131,9 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
     if (selectedActivities.includes(activityId)) {
       setSelectedActivities(selectedActivities.filter(id => id !== activityId));
       setSelectedItems(selectedItems.filter(item => 
-        item.category === "essential" || !ACTIVITIES.find(a => a.id === activityId)?.items.some(i => i.id === item.id)
+        item.category === "essential" || 
+        item.category === "weather" ||  // Keep weather items
+        !ACTIVITIES.find(a => a.id === activityId)?.items.some(i => i.id === item.id)
       ));
     } else {
       setSelectedActivities([...selectedActivities, activityId]);
