@@ -31,7 +31,7 @@ const WeatherSuggestions = ({
   const [quantities, setQuantities] = useState<Record<string, number>>(() => {
     const initial: Record<string, number> = {};
     weatherItems.forEach(item => {
-      initial[item.id] = tripDuration;
+      initial[item.id] = item.type === "shoes" ? Math.min(3, tripDuration) : tripDuration;
     });
     return initial;
   });
@@ -39,12 +39,12 @@ const WeatherSuggestions = ({
   const handleQuantityChange = (itemId: string, delta: number) => {
     setQuantities(prev => ({
       ...prev,
-      [itemId]: Math.max(1, (prev[itemId] || tripDuration) + delta)
+      [itemId]: Math.max(1, (prev[itemId] || 1) + delta)
     }));
   };
 
   const handleAddItem = (item: PackingItem) => {
-    const quantity = quantities[item.id] || tripDuration;
+    const quantity = quantities[item.id];
     onAddItem({
       ...item,
       quantity,
@@ -109,39 +109,6 @@ const WeatherSuggestions = ({
     );
   };
 
-  const renderAccessories = () => {
-    const accessories = weatherItems.filter(item => item.type === "accessory");
-    if (accessories.length === 0) return null;
-
-    return (
-      <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-primary">Weather-Specific Accessories</h3>
-        <div className="space-y-2">
-          {accessories.map((item) => {
-            const isAdded = selectedItems.some((selected) => selected.id === item.id);
-            return (
-              <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                <div>
-                  <span className="font-medium">{item.name}</span>
-                  <p className="text-sm text-gray-600">
-                    {item.weight.toFixed(1)} {travelDetails.unit}
-                  </p>
-                </div>
-                <Button
-                  variant={isAdded ? "secondary" : "default"}
-                  onClick={() => !isAdded && onAddItem(item)}
-                  disabled={isAdded}
-                >
-                  {isAdded ? "Added" : "Add to Bag"}
-                </Button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <Card className="p-6 max-w-2xl mx-auto space-y-6">
       <h2 className="text-2xl font-bold text-center text-primary">Weather-Based Suggestions</h2>
@@ -171,7 +138,6 @@ const WeatherSuggestions = ({
         {renderClothingSection("top")}
         {renderClothingSection("bottom")}
         {renderClothingSection("shoes")}
-        {renderAccessories()}
       </div>
 
       <div className="flex justify-between pt-4">
