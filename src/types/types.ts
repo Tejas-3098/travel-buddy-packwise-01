@@ -27,6 +27,7 @@ export interface TravelDetails {
   destination: string;
   startDate: string;
   endDate: string;
+  weatherItems?: PackingItem[];  // Add this optional property
 }
 
 export interface PackingList {

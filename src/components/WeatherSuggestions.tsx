@@ -74,8 +74,9 @@ const WeatherSuggestions = ({
     const newItem = {
       ...item,
       quantity,
-      weight: item.weight,  // Keep original weight per item
-      category: "weather" as const
+      weight: item.weight,
+      category: "weather" as const,
+      packed: false
     };
 
     onAddItem(newItem);
@@ -85,6 +86,8 @@ const WeatherSuggestions = ({
       description: `Added ${quantity} ${item.name} to your bag`,
     });
   };
+
+  // ... keep existing code (render methods)
 
   return (
     <Card className="p-6 max-w-2xl mx-auto space-y-6">
@@ -171,7 +174,7 @@ const WeatherSuggestions = ({
         <Button variant="outline" onClick={onBack}>
           Back
         </Button>
-        <Button onClick={onNext}>
+        <Button onClick={() => onNext()}>
           Continue to Activities
         </Button>
       </div>

@@ -18,12 +18,14 @@ interface ActivitySelectionProps {
 const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionProps) => {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
   const [selectedItems, setSelectedItems] = useState<PackingItem[]>(
-    travelDetails.essentials.map(item => ({
+    [...travelDetails.essentials.map(item => ({
       ...item,
-      category: "essential",
+      category: "essential" as const,
       packed: false,
       quantity: 1,
-    }))
+    })),
+    ...travelDetails.weatherItems || []  // Include weather items if they exist
+    ]
   );
 
   const handleActivityToggle = (activityId: string) => {
