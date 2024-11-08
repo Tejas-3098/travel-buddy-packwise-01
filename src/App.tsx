@@ -13,14 +13,16 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
       setIsAuthenticated(!!session);
+      setIsLoading(false);
     });
   }, []);
 
-  if (isAuthenticated === null) {
+  if (isLoading) {
     return <SplashScreen />;
   }
 

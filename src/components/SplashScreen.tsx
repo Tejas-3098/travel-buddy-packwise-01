@@ -1,18 +1,6 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 const SplashScreen = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/auth");
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [navigate]);
-
   return (
     <div className="h-screen w-screen flex flex-col items-center justify-center bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 relative overflow-hidden">
       {/* Background pattern */}
@@ -27,7 +15,7 @@ const SplashScreen = () => {
           duration: 0.5,
           ease: [0.645, 0.045, 0.355, 1.000]
         }}
-        className="relative z-10 flex flex-col items-center justify-center" // Added flex and centering classes
+        className="relative z-10 flex flex-col items-center justify-center"
       >
         {/* App Logo */}
         <motion.div
