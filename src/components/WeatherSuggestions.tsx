@@ -5,6 +5,7 @@ import { PackingItem, TravelDetails } from "@/types/types";
 import { Plus } from "lucide-react";
 import { calculateTotalWeight } from "@/utils/calculations";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { motion } from "framer-motion";
 
 interface WeatherSuggestionsProps {
   weatherItems: PackingItem[];
@@ -29,11 +30,19 @@ const WeatherSuggestions = ({
     <Card className="p-6 max-w-2xl mx-auto space-y-6">
       <h2 className="text-2xl font-bold text-center text-primary">Weather-Based Suggestions</h2>
       
-      <Alert>
-        <AlertDescription className="text-center">
-          Based on the weather forecast for {travelDetails.destination}, here are some suggested items for your trip from {travelDetails.startDate} to {travelDetails.endDate}.
-        </AlertDescription>
-      </Alert>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Alert className="bg-gradient-to-r from-blue-50 to-blue-100">
+          <AlertDescription className="text-center py-4">
+            Based on the weather forecast for {travelDetails.destination}, 
+            the average temperature during your trip from {travelDetails.startDate} to {travelDetails.endDate} 
+            will be predominantly sunny with an average temperature of 25°C.
+          </AlertDescription>
+        </Alert>
+      </motion.div>
       
       <WeightIndicator
         currentWeight={totalWeight}

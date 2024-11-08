@@ -31,13 +31,14 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
   }, [totalWeight, weightLimit, unit, toast]);
 
   const handleQuantityChange = (itemId: string, delta: number) => {
-    setItems(items.map(item => {
+    const updatedItems = items.map(item => {
       if (item.id === itemId) {
         const newQuantity = Math.max(1, (item.quantity || 1) + delta);
         return { ...item, quantity: newQuantity };
       }
       return item;
-    }));
+    });
+    setItems(updatedItems);
   };
 
   const handleRemoveItem = (itemId: string) => {
