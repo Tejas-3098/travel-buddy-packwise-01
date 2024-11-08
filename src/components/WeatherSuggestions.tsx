@@ -27,6 +27,9 @@ const WeatherSuggestions = ({
   const [weatherItems, setWeatherItems] = useState(initialWeatherItems);
   const totalWeight = calculateTotalWeight(selectedItems, travelDetails.unit);
   
+  // Track which items have been added to the bag
+  const [addedItems, setAddedItems] = useState<Record<string, PackingItem>>({});
+  
   const [quantities, setQuantities] = useState<Record<string, number>>(() => {
     const initial: Record<string, number> = {};
     weatherItems.forEach(item => {
@@ -59,6 +62,12 @@ const WeatherSuggestions = ({
       packed: false
     };
 
+    // Update the addedItems state
+    setAddedItems(prev => ({
+      ...prev,
+      [item.id]: newItem
+    }));
+
     onAddItem(newItem);
   };
 
@@ -66,21 +75,34 @@ const WeatherSuggestions = ({
     // Remove the item from the suggested items list
     setWeatherItems(prev => prev.filter(item => item.id !== itemId));
     
-    // Remove the item from selected items (if it was added)
-    if (isItemAdded(itemId)) {
-      onAddItem({ ...selectedItems.find(item => item.id === itemId)!, quantity: 0 });
-    }
+    // Remove from addedItems if it was added
+    setAddedItems(prev => {
+      const newAddedItems = { ...prev };
+      delete newAddedItems[itemId];
+      return newAddedItems;
+    });
     
-    // Reset the quantity in local state
+    // Reset the quantity
     setQuantities(prev => {
       const newQuantities = { ...prev };
       delete newQuantities[itemId];
       return newQuantities;
     });
+
+    // Remove from selected items by setting quantity to 0
+    if (addedItems[itemId]) {
+      onAddItem({ ...addedItems[itemId], quantity: 0 });
+    }
+  };
+
+  const handleNext = () => {
+    // Update travelDetails with the final state of weather items
+    travelDetails.weatherItems = Object.values(addedItems);
+    onNext();
   };
 
   const isItemAdded = (itemId: string) => {
-    return selectedItems.some(item => item.id === itemId);
+    return itemId in addedItems;
   };
 
   const weatherInfo = weatherItems[0]?.message || "";
@@ -132,7 +154,7 @@ const WeatherSuggestions = ({
         <Button variant="outline" onClick={onBack}>
           Back
         </Button>
-        <Button onClick={onNext}>
+        <Button onClick={handleNext}>
           Continue to Activities
         </Button>
       </div>
