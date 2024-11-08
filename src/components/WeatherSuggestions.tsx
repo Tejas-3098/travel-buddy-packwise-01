@@ -93,7 +93,7 @@ const WeatherSuggestions = ({
   const temperature = temperatureMatch ? temperatureMatch[1] : null;
 
   return (
-    <Card className="p-6 max-w-2xl mx-auto space-y-6">
+    <Card className="p-6 max-w-2xl mx-auto space-y-6 card-glass">
       <h2 className="text-2xl font-bold text-center text-primary">Weather-Based Suggestions</h2>
       
       <WeatherForecast

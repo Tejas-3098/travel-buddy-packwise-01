@@ -54,7 +54,7 @@ const InitialForm = ({ onSubmit }: InitialFormProps) => {
   };
 
   return (
-    <Card className="p-8 max-w-md mx-auto space-y-6 animate-slideIn bg-white/95 backdrop-blur-sm shadow-xl border-t-4 border-t-primary">
+    <Card className="p-8 max-w-md mx-auto space-y-6 card-glass">
       <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
         Welcome to Travel Buddy
       </h2>

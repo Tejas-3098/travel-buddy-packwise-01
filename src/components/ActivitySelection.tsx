@@ -55,7 +55,7 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
 
   return (
     <div className="container max-w-4xl mx-auto p-6 space-y-8">
-      <Card className="p-6 space-y-6">
+      <Card className="p-6 space-y-6 card-glass">
         <h2 className="text-2xl font-bold text-center text-primary">Select Your Activities</h2>
         
         <WeightIndicator

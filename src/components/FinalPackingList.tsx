@@ -31,9 +31,9 @@ const FinalPackingList = ({ items, onBack, onComplete }: FinalPackingListProps) 
         {items.map(item => (
           <Card
             key={item.id}
-            className={`p-4 cursor-pointer transition-all ${
+            className={`p-4 cursor-pointer transition-all card-glass ${
               packedItems.has(item.id)
-                ? "bg-green-50 border-green-200"
+                ? "bg-green-50/90 border-green-200"
                 : "hover:border-primary/50"
             }`}
             onClick={() => togglePacked(item.id)}
