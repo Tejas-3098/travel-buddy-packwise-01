@@ -15,15 +15,29 @@ const queryClient = new QueryClient();
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showSplash, setShowSplash] = useState(false);
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
-      setIsAuthenticated(!!session);
+      if (event === 'SIGNED_IN') {
+        setShowSplash(true);
+        setIsAuthenticated(true);
+        // Show splash screen for 3 seconds after sign in
+        setTimeout(() => {
+          setShowSplash(false);
+        }, 3000);
+      } else {
+        setIsAuthenticated(!!session);
+      }
       setIsLoading(false);
     });
   }, []);
 
   if (isLoading) {
+    return <SplashScreen />;
+  }
+
+  if (showSplash) {
     return <SplashScreen />;
   }
 
