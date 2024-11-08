@@ -47,13 +47,16 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
     setItems(items.filter(item => item.id !== itemId));
   };
 
-  const renderItemsByCategory = (category: string) => (
-    <div key={category} className="space-y-2">
-      <h3 className="font-semibold capitalize">{category} Items</h3>
-      <div className="space-y-2">
-        {items
-          .filter(item => item.category === category)
-          .map(item => (
+  const renderItemsByCategory = (category: string) => {
+    const categoryItems = items.filter(item => item.category === category);
+    
+    if (categoryItems.length === 0) return null;
+
+    return (
+      <div key={category} className="space-y-2">
+        <h3 className="font-semibold capitalize">{category} Items</h3>
+        <div className="space-y-2">
+          {categoryItems.map(item => (
             <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
               <span>{item.name}</span>
               <div className="flex items-center gap-4">
@@ -87,9 +90,10 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
               </div>
             </div>
           ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <Card className="p-6 max-w-2xl mx-auto space-y-6">
@@ -102,7 +106,7 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
       />
 
       <div className="space-y-4">
-        {["essential", "activity", "weather"].map(renderItemsByCategory)}
+        {["essential", "weather", "activity"].map(renderItemsByCategory)}
       </div>
 
       <div className="flex justify-between pt-4">
