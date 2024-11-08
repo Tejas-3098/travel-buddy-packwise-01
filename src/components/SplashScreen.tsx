@@ -21,45 +21,45 @@ const SplashScreen = () => {
         transition={{ duration: 0.5 }}
         className="text-center"
       >
-        <div className="mb-8">
+        <div className="mb-8 relative w-[200px] h-[200px]">
+          {/* Suitcase */}
           <motion.svg
-            width="120"
-            height="120"
+            width="100"
+            height="100"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="absolute left-0 bottom-0"
+            initial={{ x: 0, y: 0 }}
+            animate={{ x: 100, y: -100 }}
+            transition={{ duration: 2, ease: "easeOut" }}
           >
-            {/* Suitcase base */}
-            <motion.path
-              d="M4 7C4 6.44772 4.44772 6 5 6H19C19.5523 6 20 6.44772 20 7V19C20 19.5523 19.5523 20 19 20H5C4.44772 20 4 19.5523 4 19V7Z"
+            <rect x="4" y="7" width="16" height="13" stroke="white" strokeWidth="2" fill="none" />
+            <path d="M8 7V4C8 3.44772 8.44772 3 9 3H15C15.5523 3 16 3.44772 16 4V7" stroke="white" strokeWidth="2" />
+          </motion.svg>
+
+          {/* Airplane */}
+          <motion.svg
+            width="100"
+            height="100"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="absolute left-0 bottom-0"
+            initial={{ x: -50, y: 50, rotate: 0, opacity: 0 }}
+            animate={{ x: 200, y: -100, rotate: 45, opacity: 1 }}
+            transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
+          >
+            <path
+              d="M4 19L17 6M17 6H8M17 6V15"
               stroke="white"
               strokeWidth="2"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
-            {/* Suitcase handle */}
-            <motion.path
-              d="M8 6V4C8 3.44772 8.44772 3 9 3H15C15.5523 3 16 3.44772 16 4V6"
-              stroke="white"
-              strokeWidth="2"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
-            />
-            {/* Decorative lines */}
-            <motion.path
-              d="M8 10H16M8 14H16"
-              stroke="white"
-              strokeWidth="2"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 1.5, repeat: Infinity, delay: 1 }}
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </motion.svg>
         </div>
+
         <motion.h1
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
