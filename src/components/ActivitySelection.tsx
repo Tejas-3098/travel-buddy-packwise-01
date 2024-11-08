@@ -83,21 +83,23 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
           </div>
         </div>
 
-        <div className="space-y-4">
-          <Label className="text-lg">Weather-Related Items</Label>
-          <div className="grid gap-2">
-            {selectedItems
-              .filter(item => item.category === "weather")
-              .map(item => (
-                <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow-sm">
-                  <span className="font-medium">{item.name}</span>
-                  <span className="text-gray-600">
-                    {(item.weight * (item.quantity || 1)).toFixed(1)} {travelDetails.unit}
-                  </span>
-                </div>
-              ))}
+        {selectedItems.some(item => item.category === "weather") && (
+          <div className="space-y-4">
+            <Label className="text-lg">Weather-Related Items</Label>
+            <div className="grid gap-2">
+              {selectedItems
+                .filter(item => item.category === "weather")
+                .map(item => (
+                  <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow-sm">
+                    <span className="font-medium">{item.name}</span>
+                    <span className="text-gray-600">
+                      {(item.weight * (item.quantity || 1)).toFixed(1)} {travelDetails.unit}
+                    </span>
+                  </div>
+                ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <ActivityList 
           activities={ACTIVITIES} 

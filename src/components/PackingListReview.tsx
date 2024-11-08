@@ -34,7 +34,8 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
     setItems(prevItems => prevItems.map(item => {
       if (item.id === itemId) {
         const newQuantity = Math.max(1, (item.quantity || 1) + delta);
-        const newTotalWeight = totalWeight + (item.weight * delta);
+        const weightDifference = item.weight * delta;
+        const newTotalWeight = totalWeight + weightDifference;
         
         if (newTotalWeight > weightLimit) {
           toast({
@@ -61,7 +62,7 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
       });
       return;
     }
-    setItems(items.filter(item => item.id !== itemId));
+    setItems(prevItems => prevItems.filter(item => item.id !== itemId));
   };
 
   const renderItemsByCategory = (category: string) => {
