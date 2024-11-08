@@ -6,7 +6,7 @@ import { calculateTotalWeight } from "@/utils/calculations";
 import { calculateTripDuration } from "@/utils/dateUtils";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Plus, Minus, Sun, Cloud, CloudRain, Snowflake } from "lucide-react";
+import { Plus, Minus, Sun, Cloud, CloudRain, Snowflake, Thermometer } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface WeatherSuggestionsProps {
@@ -38,14 +38,21 @@ const WeatherSuggestions = ({
     return initial;
   });
 
+  // Extract weather information from the first item's message
+  const weatherInfo = weatherItems[0]?.message || "";
+  const temperatureMatch = weatherInfo.match(/temperature of (-?\d+\.?\d*)°C/);
+  const temperature = temperatureMatch ? temperatureMatch[1] : null;
+
   const getWeatherIcon = (condition: string) => {
     switch (condition.toLowerCase()) {
       case 'sunny':
       case 'clear':
         return <Sun className="h-6 w-6 text-yellow-500" />;
       case 'rainy':
+      case 'rain':
         return <CloudRain className="h-6 w-6 text-blue-500" />;
       case 'snowy':
+      case 'snow':
         return <Snowflake className="h-6 w-6 text-blue-300" />;
       default:
         return <Cloud className="h-6 w-6 text-gray-500" />;
@@ -99,7 +106,7 @@ const WeatherSuggestions = ({
       >
         <div className="flex items-center gap-3">
           {weatherItems[0]?.message && getWeatherIcon(weatherItems[0].message)}
-          <div>
+          <div className="flex-grow">
             <h3 className="text-lg font-semibold text-blue-800 mb-2">Weather Forecast</h3>
             <p className="text-blue-700">
               Your {tripDuration}-day trip to <span className="font-semibold">{travelDetails.destination}</span>
@@ -107,7 +114,13 @@ const WeatherSuggestions = ({
             <p className="text-blue-700 mt-1">
               From {travelDetails.startDate} to {travelDetails.endDate}
             </p>
-            <p className="text-blue-700 mt-3 font-medium">
+            <div className="flex items-center gap-2 mt-3">
+              <Thermometer className="h-5 w-5 text-red-500" />
+              <span className="text-lg font-medium text-blue-800">
+                {temperature ? `${temperature}°C` : "Temperature not available"}
+              </span>
+            </div>
+            <p className="text-blue-700 mt-2 font-medium">
               {weatherItems[0]?.message || "Loading weather information..."}
             </p>
           </div>
