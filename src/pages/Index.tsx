@@ -47,17 +47,6 @@ const Index = () => {
         );
       case 2:
         return (
-          <ActivitySelection
-            travelDetails={travelDetails}
-            onNext={(items: PackingItem[]) => {
-              setPackingItems(items);
-              setCurrentStep(3);
-            }}
-            onBack={() => setCurrentStep(1)}
-          />
-        );
-      case 3:
-        return (
           <WeatherSuggestions
             weatherItems={[]}
             selectedItems={packingItems}
@@ -65,7 +54,18 @@ const Index = () => {
             onAddItem={(item: PackingItem) => {
               setPackingItems([...packingItems, item]);
             }}
-            onNext={() => setCurrentStep(4)}
+            onNext={() => setCurrentStep(3)}
+            onBack={() => setCurrentStep(1)}
+          />
+        );
+      case 3:
+        return (
+          <ActivitySelection
+            travelDetails={travelDetails}
+            onNext={(items: PackingItem[]) => {
+              setPackingItems(items);
+              setCurrentStep(4);
+            }}
             onBack={() => setCurrentStep(2)}
           />
         );
