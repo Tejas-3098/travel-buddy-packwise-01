@@ -1,6 +1,7 @@
 import { Label } from "@/components/ui/label";
 import ActivityIcon from "./ActivityIcon";
 import { Activity } from "@/types/types";
+import { ACTIVITIES } from "./activityData"; // Importing ACTIVITIES
 
 interface ActivityListProps {
   activities: typeof ACTIVITIES;
