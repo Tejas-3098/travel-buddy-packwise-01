@@ -4,6 +4,7 @@ import WeightIndicator from "./WeightIndicator";
 import { PackingItem, TravelDetails } from "@/types/types";
 import { Plus } from "lucide-react";
 import { calculateTotalWeight } from "@/utils/calculations";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface WeatherSuggestionsProps {
   weatherItems: PackingItem[];
@@ -27,6 +28,12 @@ const WeatherSuggestions = ({
   return (
     <Card className="p-6 max-w-2xl mx-auto space-y-6">
       <h2 className="text-2xl font-bold text-center text-primary">Weather-Based Suggestions</h2>
+      
+      <Alert>
+        <AlertDescription className="text-center">
+          Based on the weather forecast for {travelDetails.destination}, here are some suggested items for your trip from {travelDetails.startDate} to {travelDetails.endDate}.
+        </AlertDescription>
+      </Alert>
       
       <WeightIndicator
         currentWeight={totalWeight}
