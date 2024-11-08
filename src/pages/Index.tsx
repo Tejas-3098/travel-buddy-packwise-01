@@ -6,17 +6,23 @@ import PackingListReview from "@/components/PackingListReview";
 import CompletionPage from "@/components/CompletionPage";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { PackingItem, TravelDetails } from "@/types/types";
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
+  const [travelDetails, setTravelDetails] = useState<TravelDetails>({
     destination: "",
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: "",
+    endDate: "",
+    weightLimit: 0,
+    unit: "kg",
+    essentials: [],
+    weatherItems: []
   });
+  const [packingItems, setPackingItems] = useState<PackingItem[]>([]);
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -31,16 +37,51 @@ const Index = () => {
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <InitialForm onNext={(data) => {
-          setFormData(data);
-          setCurrentStep(2);
-        }} formData={formData} />;
+        return (
+          <InitialForm
+            onSubmit={(details: TravelDetails) => {
+              setTravelDetails(details);
+              setCurrentStep(2);
+            }}
+          />
+        );
       case 2:
-        return <ActivitySelection onNext={() => setCurrentStep(3)} onBack={() => setCurrentStep(1)} />;
+        return (
+          <ActivitySelection
+            travelDetails={travelDetails}
+            onNext={(items: PackingItem[]) => {
+              setPackingItems(items);
+              setCurrentStep(3);
+            }}
+            onBack={() => setCurrentStep(1)}
+          />
+        );
       case 3:
-        return <WeatherSuggestions onNext={() => setCurrentStep(4)} onBack={() => setCurrentStep(2)} destination={formData.destination} />;
+        return (
+          <WeatherSuggestions
+            weatherItems={[]}
+            selectedItems={packingItems}
+            travelDetails={travelDetails}
+            onAddItem={(item: PackingItem) => {
+              setPackingItems([...packingItems, item]);
+            }}
+            onNext={() => setCurrentStep(4)}
+            onBack={() => setCurrentStep(2)}
+          />
+        );
       case 4:
-        return <PackingListReview onNext={() => setCurrentStep(5)} onBack={() => setCurrentStep(3)} />;
+        return (
+          <PackingListReview
+            items={packingItems}
+            weightLimit={travelDetails.weightLimit}
+            unit={travelDetails.unit}
+            onNext={(items: PackingItem[]) => {
+              setPackingItems(items);
+              setCurrentStep(5);
+            }}
+            onBack={() => setCurrentStep(3)}
+          />
+        );
       case 5:
         return <CompletionPage onBack={() => setCurrentStep(4)} />;
       default:
