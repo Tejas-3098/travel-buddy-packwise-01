@@ -25,7 +25,7 @@ const FinalPackingList = ({ items, onBack, onComplete }: FinalPackingListProps) 
 
   return (
     <div className="container max-w-4xl mx-auto p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-center">Your Packing List</h2>
+      <h2 className="text-2xl font-bold text-center text-primary">Your Packing List</h2>
       
       <div className="grid gap-4 md:grid-cols-2">
         {items.map(item => (
@@ -40,13 +40,13 @@ const FinalPackingList = ({ items, onBack, onComplete }: FinalPackingListProps) 
           >
             <div className="flex items-start justify-between">
               <div className="space-y-1">
-                <h3 className="font-medium bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+                <h3 className="font-medium text-primary">
                   {item.name}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                   Quantity: {item.quantity || 1}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                   Weight: {item.weight * (item.quantity || 1)} {item.unit}
                 </p>
               </div>
@@ -68,7 +68,7 @@ const FinalPackingList = ({ items, onBack, onComplete }: FinalPackingListProps) 
         </Button>
         <Button 
           onClick={onComplete}
-          className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+          className="bg-primary hover:bg-primary/90"
         >
           Complete Packing
         </Button>
