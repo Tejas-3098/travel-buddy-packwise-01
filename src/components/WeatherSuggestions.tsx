@@ -59,7 +59,8 @@ const WeatherSuggestions = ({
 
   const handleAddItem = (item: PackingItem) => {
     const quantity = quantities[item.id];
-    const newWeight = totalWeight + (item.weight * quantity);
+    const itemWeight = item.weight * quantity;
+    const newWeight = totalWeight + itemWeight;
     
     if (newWeight > travelDetails.weightLimit) {
       toast({
@@ -70,11 +71,13 @@ const WeatherSuggestions = ({
       return;
     }
 
-    onAddItem({
+    const newItem = {
       ...item,
       quantity,
-      weight: item.weight * quantity
-    });
+      weight: itemWeight
+    };
+
+    onAddItem(newItem);
 
     toast({
       title: "Item Added",
