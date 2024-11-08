@@ -6,7 +6,6 @@ const SplashScreen = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Navigate to the main form after 3 seconds
     const timer = setTimeout(() => {
       navigate("/home");
     }, 3000);
@@ -15,7 +14,7 @@ const SplashScreen = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-primary via-accent to-secondary overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 overflow-hidden">
       <motion.div
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -32,26 +31,32 @@ const SplashScreen = () => {
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
           >
-            <path
-              d="M12 2L2 7L12 12L22 7L12 2Z"
+            {/* Suitcase base */}
+            <motion.path
+              d="M4 7C4 6.44772 4.44772 6 5 6H19C19.5523 6 20 6.44772 20 7V19C20 19.5523 19.5523 20 19 20H5C4.44772 20 4 19.5523 4 19V7Z"
               stroke="white"
               strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.5, repeat: Infinity }}
             />
-            <path
-              d="M2 17L12 22L22 17"
+            {/* Suitcase handle */}
+            <motion.path
+              d="M8 6V4C8 3.44772 8.44772 3 9 3H15C15.5523 3 16 3.44772 16 4V6"
               stroke="white"
               strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
             />
-            <path
-              d="M2 12L12 17L22 12"
+            {/* Decorative lines */}
+            <motion.path
+              d="M8 10H16M8 14H16"
               stroke="white"
               strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.5, repeat: Infinity, delay: 1 }}
             />
           </motion.svg>
         </div>
