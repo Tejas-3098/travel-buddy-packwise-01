@@ -31,7 +31,16 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<SplashScreen />} />
+            <Route
+              path="/"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/form" replace />
+                ) : (
+                  <Navigate to="/auth" replace />
+                )
+              }
+            />
             <Route
               path="/auth"
               element={isAuthenticated ? <Navigate to="/form" replace /> : <AuthScreen />}
