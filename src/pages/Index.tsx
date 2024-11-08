@@ -27,25 +27,26 @@ const Index = () => {
   const navigate = useNavigate();
 
   const fetchWeatherSuggestions = async () => {
-    const response = await fetch(
-      `/api/packing-suggestions?city=${encodeURIComponent(travelDetails.destination)}&startDate=${travelDetails.startDate}&endDate=${travelDetails.endDate}`
-    );
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to fetch weather data');
+    try {
+      const response = await fetch(
+        `/api/packing-suggestions?city=${encodeURIComponent(travelDetails.destination)}&startDate=${travelDetails.startDate}&endDate=${travelDetails.endDate}`
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch weather data');
+      }
+      return response.json();
+    } catch (error) {
+      throw new Error('Failed to fetch weather data. Please try again.');
     }
-    return response.json();
   };
 
-  const { data: weatherData, isLoading: isWeatherLoading, error } = useQuery({
+  const { data: weatherData, isLoading: isWeatherLoading } = useQuery({
     queryKey: ['weather', travelDetails.destination, travelDetails.startDate, travelDetails.endDate],
     queryFn: fetchWeatherSuggestions,
     enabled: currentStep === 2 && Boolean(travelDetails.destination) && Boolean(travelDetails.startDate) && Boolean(travelDetails.endDate),
     retry: 2,
-    onSettled: (_, error: Error | null) => {
-      if (error) {
-        toast.error(error.message || 'Failed to fetch weather data. Please try again.');
-      }
+    onError: (error: Error) => {
+      toast.error(error.message);
     }
   });
 
