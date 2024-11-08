@@ -146,6 +146,11 @@ const WeatherSuggestions = ({
         <p className="text-blue-700 mt-1">
           From {travelDetails.startDate} to {travelDetails.endDate}
         </p>
+        <p className="text-blue-700 mt-3 font-medium">
+          Expected Weather: {weatherItems[0]?.category === "weather" ? 
+            `Predominantly ${weatherItems[0].name.split(' ')[0]} conditions` : 
+            "Weather data loading..."}
+        </p>
       </motion.div>
       
       <WeightIndicator
