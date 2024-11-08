@@ -3,11 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { Plus, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { EssentialItem, TravelDetails } from "@/types/types";
-import { isWeightValid } from "@/utils/calculations";
 import { useToast } from "@/components/ui/use-toast";
-import WeightInput from "@/components/essentials/WeightInput";
+import EssentialItemForm from "./essentials/EssentialItemForm";
 
 interface InitialFormProps {
   onSubmit: (details: TravelDetails) => void;
@@ -20,54 +19,12 @@ const InitialForm = ({ onSubmit }: InitialFormProps) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [essentials, setEssentials] = useState<EssentialItem[]>([]);
-  const [newItem, setNewItem] = useState({ name: "", weight: "" });
   const { toast } = useToast();
-
-  const handleAddEssential = () => {
-    if (!newItem.name || !newItem.weight) {
-      toast({
-        title: "Error",
-        description: "Please fill in both name and weight",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const weight = parseFloat(newItem.weight);
-    if (!isWeightValid(weight)) {
-      toast({
-        title: "Invalid Weight",
-        description: "Weight must be between 0 and 100",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setEssentials([
-      ...essentials,
-      {
-        id: crypto.randomUUID(),
-        name: newItem.name,
-        weight,
-        unit,
-      },
-    ]);
-    setNewItem({ name: "", weight: "" });
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const limit = parseFloat(weightLimit);
     
-    if (!isWeightValid(limit)) {
-      toast({
-        title: "Invalid Weight Limit",
-        description: "Weight limit must be between 0 and 100",
-        variant: "destructive",
-      });
-      return;
-    }
-
     if (!destination || !startDate || !endDate) {
       toast({
         title: "Missing Information",
@@ -156,23 +113,10 @@ const InitialForm = ({ onSubmit }: InitialFormProps) => {
 
         <div className="space-y-4">
           <Label>Essential Items</Label>
-          <div className="flex gap-2">
-            <Input
-              placeholder="Item name"
-              value={newItem.name}
-              onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-            />
-            <div className="w-32">
-              <WeightInput
-                value={newItem.weight}
-                unit={unit}
-                onChange={(value) => setNewItem({ ...newItem, weight: value })}
-              />
-            </div>
-            <Button type="button" onClick={handleAddEssential} size="icon">
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
+          <EssentialItemForm 
+            unit={unit} 
+            onAdd={(item) => setEssentials([...essentials, item])} 
+          />
 
           <div className="space-y-2">
             {essentials.map((item) => (
