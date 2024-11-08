@@ -25,7 +25,7 @@ const FinalPackingList = ({ items, onBack, onComplete }: FinalPackingListProps) 
 
   return (
     <div className="container max-w-4xl mx-auto p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-center text-primary">Your Packing List</h2>
+      <h2 className="text-2xl font-bold text-center">Your Packing List</h2>
       
       <div className="grid gap-4 md:grid-cols-2">
         {items.map(item => (
@@ -33,14 +33,16 @@ const FinalPackingList = ({ items, onBack, onComplete }: FinalPackingListProps) 
             key={item.id}
             className={`p-4 cursor-pointer transition-all card-glass ${
               packedItems.has(item.id)
-                ? "bg-green-50/90 border-green-200"
-                : "hover:border-primary/50"
+                ? "bg-green-50/90 border-t-green-500"
+                : ""
             }`}
             onClick={() => togglePacked(item.id)}
           >
             <div className="flex items-start justify-between">
               <div className="space-y-1">
-                <h3 className="font-medium">{item.name}</h3>
+                <h3 className="font-medium bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+                  {item.name}
+                </h3>
                 <p className="text-sm text-gray-600">
                   Quantity: {item.quantity || 1}
                 </p>
@@ -57,10 +59,17 @@ const FinalPackingList = ({ items, onBack, onComplete }: FinalPackingListProps) 
       </div>
 
       <div className="flex justify-between pt-4">
-        <Button variant="outline" onClick={onBack}>
+        <Button 
+          variant="outline" 
+          onClick={onBack}
+          className="hover:border-primary/50"
+        >
           Back to Review
         </Button>
-        <Button onClick={onComplete}>
+        <Button 
+          onClick={onComplete}
+          className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+        >
           Complete Packing
         </Button>
       </div>
