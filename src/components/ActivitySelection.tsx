@@ -23,7 +23,11 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
       packed: false,
       quantity: 1,
     })),
-    ...(travelDetails.weatherItems || [])
+    ...(travelDetails.weatherItems || []).map(item => ({
+      ...item,
+      category: "weather" as const,
+      packed: false,
+    }))
   ]);
 
   const handleActivityToggle = (activityId: string) => {

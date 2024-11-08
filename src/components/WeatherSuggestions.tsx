@@ -74,7 +74,6 @@ const WeatherSuggestions = ({
     const newItem = {
       ...item,
       quantity,
-      weight: item.weight,
       category: "weather" as const,
       packed: false
     };
@@ -86,8 +85,6 @@ const WeatherSuggestions = ({
       description: `Added ${quantity} ${item.name} to your bag`,
     });
   };
-
-  // ... keep existing code (render methods)
 
   return (
     <Card className="p-6 max-w-2xl mx-auto space-y-6">

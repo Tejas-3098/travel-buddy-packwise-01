@@ -18,10 +18,7 @@ interface PackingListReviewProps {
 const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onBack }: PackingListReviewProps) => {
   const [items, setItems] = useState<PackingItem[]>(initialItems);
   const { toast } = useToast();
-  const totalWeight = calculateTotalWeight(items.map(item => ({
-    ...item,
-    weight: item.weight * (item.quantity || 1)
-  })), unit);
+  const totalWeight = calculateTotalWeight(items, unit);
 
   useEffect(() => {
     if (totalWeight > weightLimit) {
@@ -37,6 +34,17 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
     setItems(prevItems => prevItems.map(item => {
       if (item.id === itemId) {
         const newQuantity = Math.max(1, (item.quantity || 1) + delta);
+        const newTotalWeight = totalWeight + (item.weight * delta);
+        
+        if (newTotalWeight > weightLimit) {
+          toast({
+            title: "Weight Limit Warning",
+            description: "This change would exceed your weight limit",
+            variant: "destructive",
+          });
+          return item;
+        }
+        
         return { ...item, quantity: newQuantity };
       }
       return item;
@@ -79,13 +87,15 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleRemoveItem(item.id)}
-                  >
-                    <Trash2 className="h-4 w-4 text-red-500" />
-                  </Button>
+                  {item.category !== 'essential' && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemoveItem(item.id)}
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
