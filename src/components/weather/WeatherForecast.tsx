@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
-import { Sun, Cloud, CloudRain, Snowflake, Thermometer, AlertCircle } from "lucide-react";
+import { Sun, Cloud, CloudRain, Snowflake, Thermometer } from "lucide-react";
 import { TravelDetails } from "@/types/types";
 import { calculateTripDuration } from "@/utils/dateUtils";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface WeatherForecastProps {
   weatherInfo: string;
@@ -14,27 +13,20 @@ const WeatherForecast = ({ weatherInfo, temperature, travelDetails }: WeatherFor
   const tripDuration = calculateTripDuration(travelDetails.startDate, travelDetails.endDate);
 
   const getWeatherIcon = (condition: string) => {
-    const lowerCondition = condition.toLowerCase();
-    if (lowerCondition.includes('sunny') || lowerCondition.includes('clear')) {
-      return <Sun className="h-6 w-6 text-yellow-500" />;
-    } else if (lowerCondition.includes('rain')) {
-      return <CloudRain className="h-6 w-6 text-blue-500" />;
-    } else if (lowerCondition.includes('snow')) {
-      return <Snowflake className="h-6 w-6 text-blue-300" />;
+    switch (condition.toLowerCase()) {
+      case 'sunny':
+      case 'clear':
+        return <Sun className="h-6 w-6 text-yellow-500" />;
+      case 'rainy':
+      case 'rain':
+        return <CloudRain className="h-6 w-6 text-blue-500" />;
+      case 'snowy':
+      case 'snow':
+        return <Snowflake className="h-6 w-6 text-blue-300" />;
+      default:
+        return <Cloud className="h-6 w-6 text-gray-500" />;
     }
-    return <Cloud className="h-6 w-6 text-gray-500" />;
   };
-
-  if (weatherInfo.includes('API key') || weatherInfo.includes('error')) {
-    return (
-      <Alert variant="destructive">
-        <AlertCircle className="h-4 w-4" />
-        <AlertDescription>
-          {weatherInfo}
-        </AlertDescription>
-      </Alert>
-    );
-  }
 
   return (
     <motion.div
@@ -51,16 +43,14 @@ const WeatherForecast = ({ weatherInfo, temperature, travelDetails }: WeatherFor
             Your {tripDuration}-day trip to <span className="font-semibold">{travelDetails.destination}</span>
           </p>
           <p className="text-blue-700 mt-1">
-            From {new Date(travelDetails.startDate).toLocaleDateString()} to {new Date(travelDetails.endDate).toLocaleDateString()}
+            From {travelDetails.startDate} to {travelDetails.endDate}
           </p>
-          {temperature && (
-            <div className="flex items-center gap-2 mt-3">
-              <Thermometer className="h-5 w-5 text-red-500" />
-              <span className="text-lg font-medium text-blue-800">
-                {temperature}°C
-              </span>
-            </div>
-          )}
+          <div className="flex items-center gap-2 mt-3">
+            <Thermometer className="h-5 w-5 text-red-500" />
+            <span className="text-lg font-medium text-blue-800">
+              {temperature ? `${temperature}°C` : "Temperature not available"}
+            </span>
+          </div>
           <p className="text-blue-700 mt-2 font-medium">
             {weatherInfo || "Loading weather information..."}
           </p>
