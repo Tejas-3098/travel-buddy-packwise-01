@@ -17,6 +17,7 @@ interface WeatherSuggestionsProps {
   onBack: () => void;
   isLoading?: boolean;
   weatherMessage?: string;
+  temperature?: string | null;
 }
 
 const WeatherSuggestions = ({
@@ -28,6 +29,7 @@ const WeatherSuggestions = ({
   onBack,
   isLoading = false,
   weatherMessage = "",
+  temperature = null,
 }: WeatherSuggestionsProps) => {
   const [addedItems, setAddedItems] = useState<Record<string, PackingItem>>({});
   const [quantities, setQuantities] = useState<Record<string, number>>({});
@@ -101,7 +103,7 @@ const WeatherSuggestions = ({
       
       <WeatherForecast
         weatherInfo={weatherMessage || "No weather information available"}
-        temperature={null}
+        temperature={temperature}
         travelDetails={travelDetails}
       />
       
