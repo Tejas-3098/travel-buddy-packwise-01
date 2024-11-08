@@ -29,17 +29,16 @@ const SplashScreen = () => {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute left-1/2 bottom-1/2 transform -translate-x-1/2"
-            initial={{ y: 0, scale: 1 }}
+            className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            initial={{ y: 0, scale: 1, opacity: 1 }}
             animate={{ 
-              y: [-10, -100],
-              scale: [1, 0.6],
-              opacity: [1, 0.8]
+              y: -150,
+              scale: 0.6,
+              opacity: 0
             }}
             transition={{ 
-              duration: 2,
-              ease: "easeOut",
-              times: [0, 1]
+              duration: 1.5,
+              ease: "easeOut"
             }}
           >
             <rect x="4" y="7" width="16" height="13" rx="2" stroke="white" strokeWidth="2" fill="none" />
@@ -54,37 +53,38 @@ const SplashScreen = () => {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute left-0 bottom-1/2"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2"
             initial={{ 
               x: -50,
               y: 50,
-              scale: 0.5,
+              scale: 0.8,
               opacity: 0,
-              rotate: 15
+              rotate: 0
             }}
             animate={{ 
-              x: 300,
-              y: -100,
-              scale: 1,
+              x: 350,
+              y: -50,
+              scale: 1.2,
               opacity: [0, 1, 1, 0],
-              rotate: 15
+              rotate: [0, 15, 15, 15]
             }}
             transition={{ 
-              duration: 2.5,
-              delay: 0.3,
-              ease: "easeOut",
-              opacity: { times: [0, 0.2, 0.8, 1] }
+              duration: 2,
+              delay: 0.8,
+              ease: [0.4, 0, 0.2, 1],
+              opacity: { times: [0, 0.1, 0.9, 1] }
             }}
           >
             <path
-              d="M3 8L7 12M7 12L3 16M7 12H21"
+              d="M12 6H6L3 9L6 12H12L18 15L21 12L18 9L12 6Z"
               stroke="white"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              fill="none"
             />
             <path
-              d="M16 8L18 6L21 9L19 11M16 16L18 18L21 15L19 13"
+              d="M12 6V18"
               stroke="white"
               strokeWidth="2"
               strokeLinecap="round"
