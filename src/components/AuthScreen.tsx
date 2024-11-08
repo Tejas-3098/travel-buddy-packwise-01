@@ -48,9 +48,8 @@ const AuthScreen = () => {
               input: 'rounded-md',
             }
           }}
-          providers={["google"]}
-          redirectTo={window.location.origin + "/form"}
-          onlyThirdPartyProviders
+          providers={["google", "facebook"]}
+          redirectTo={`${window.location.origin}/form`}
         />
       </Card>
     </motion.div>
