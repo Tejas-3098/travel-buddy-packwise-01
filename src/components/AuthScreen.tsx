@@ -48,7 +48,7 @@ const AuthScreen = () => {
               input: 'rounded-md',
             }
           }}
-          providers={[]}
+          providers={["google", "facebook"]}
           redirectTo={`${window.location.origin}/form`}
         />
       </Card>
