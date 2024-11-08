@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { Sun, Cloud, CloudRain, Snowflake, Thermometer } from "lucide-react";
+import { Sun, Cloud, CloudRain, Snowflake, Thermometer, AlertCircle } from "lucide-react";
 import { TravelDetails } from "@/types/types";
 import { calculateTripDuration } from "@/utils/dateUtils";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface WeatherForecastProps {
   weatherInfo: string;
@@ -23,6 +24,17 @@ const WeatherForecast = ({ weatherInfo, temperature, travelDetails }: WeatherFor
     }
     return <Cloud className="h-6 w-6 text-gray-500" />;
   };
+
+  if (weatherInfo.includes('API key') || weatherInfo.includes('error')) {
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          {weatherInfo}
+        </AlertDescription>
+      </Alert>
+    );
+  }
 
   return (
     <motion.div

@@ -15,10 +15,22 @@ const getWeatherData = async (city) => {
         console.log(`Fetching weather data from OpenWeather API for city: ${city}`);
         
         const response = await axios.get(url);
+        
+        // Validate the response
+        if (!response.data || !response.data.list) {
+            throw new Error('Invalid response from weather API');
+        }
+
         console.log('Weather data retrieved successfully');
         return response.data;
     } catch (error) {
         console.error('Error fetching weather data:', error.response?.data || error.message);
+        if (error.response?.data?.message === 'city not found') {
+            throw new Error('City not found. Please check the city name and try again.');
+        }
+        if (error.response?.status === 401) {
+            throw new Error('Invalid API key. Please check your OpenWeather API configuration.');
+        }
         throw new Error(error.response?.data?.message || 'Failed to fetch weather data');
     }
 };

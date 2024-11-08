@@ -57,7 +57,10 @@ const Index = () => {
     queryKey: ['weather', travelDetails.destination, travelDetails.startDate, travelDetails.endDate],
     queryFn: fetchWeatherSuggestions,
     enabled: currentStep === 2 && Boolean(travelDetails.destination) && Boolean(travelDetails.startDate) && Boolean(travelDetails.endDate),
-    retry: 2
+    retry: 2,
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Failed to fetch weather data');
+    }
   });
 
   const handleSignOut = async () => {
