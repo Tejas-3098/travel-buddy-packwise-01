@@ -26,16 +26,16 @@ const getPackingSuggestions = async (req, res) => {
             throw new Error('No weather data available for the specified date range.');
         }
 
-        // Analyze the predominant weather condition for the travel period
-        const predominantWeather = analyzeWeatherTrend(filteredWeatherData);
-        console.log('Predominant weather:', predominantWeather);
+        // Analyze the predominant weather condition and calculate average temperature
+        const weatherAnalysis = analyzeWeatherTrend(filteredWeatherData);
+        console.log('Weather analysis:', weatherAnalysis);
 
         // Get item suggestions based on the predominant weather condition
-        const itemSuggestions = suggestItemsForOverallWeather(predominantWeather);
+        const itemSuggestions = suggestItemsForOverallWeather(weatherAnalysis);
         console.log('Item suggestions:', itemSuggestions);
 
         // Create a summary message for the user
-        const summaryMessage = `This is going to be the weather in your specified travel dates: Predominantly ${predominantWeather.condition} with an average temperature of ${predominantWeather.avgTemp.toFixed(1)}°C. Here are a few items that I can suggest.`;
+        const summaryMessage = `The weather in ${city} would be predominantly ${weatherAnalysis.condition} with an average temperature of ${weatherAnalysis.avgTemp.toFixed(1)}°C`;
 
         res.json({ message: summaryMessage, itemSuggestions });
     } catch (error) {
@@ -51,7 +51,7 @@ const analyzeWeatherTrend = (weatherData) => {
 
     weatherData.forEach(entry => {
         const weatherCondition = entry.weather[0].main.toLowerCase();
-        totalTemp += entry.main.temp;
+        totalTemp += entry.main.temp;  // OpenWeatherAPI returns temperature in Celsius
         count += 1;
 
         if (conditionCounts[weatherCondition]) {
