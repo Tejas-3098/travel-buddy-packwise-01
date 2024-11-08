@@ -27,9 +27,7 @@ const WeatherSuggestions = ({
   const [weatherItems, setWeatherItems] = useState(initialWeatherItems);
   const totalWeight = calculateTotalWeight(selectedItems, travelDetails.unit);
   
-  // Track which items have been added to the bag
   const [addedItems, setAddedItems] = useState<Record<string, PackingItem>>({});
-  
   const [quantities, setQuantities] = useState<Record<string, number>>({});
 
   const handleQuantityChange = (itemId: string, delta: number) => {
