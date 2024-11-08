@@ -23,7 +23,7 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
       packed: false,
       quantity: 1,
     })),
-    ...(travelDetails.weatherItems || [])
+    ...(travelDetails.weatherItems || []).filter(item => item.quantity && item.quantity > 0)
   ]);
 
   const handleActivityToggle = (activityId: string) => {
@@ -91,7 +91,12 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
                 .filter(item => item.category === "weather")
                 .map(item => (
                   <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow-sm">
-                    <span className="font-medium">{item.name}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{item.name}</span>
+                      {item.quantity > 1 && (
+                        <span className="text-sm text-gray-500">x{item.quantity}</span>
+                      )}
+                    </div>
                     <span className="text-gray-600">
                       {(item.weight * (item.quantity || 1)).toFixed(1)} {travelDetails.unit}
                     </span>

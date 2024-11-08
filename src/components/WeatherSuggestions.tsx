@@ -33,12 +33,12 @@ const WeatherSuggestions = ({
   const [quantities, setQuantities] = useState<Record<string, number>>(() => {
     const initial: Record<string, number> = {};
     weatherItems.forEach(item => {
-      initial[item.id] = 1;
+      const existingItem = selectedItems.find(selected => selected.id === item.id);
+      initial[item.id] = existingItem?.quantity || 1;
     });
     return initial;
   });
 
-  // Extract weather information from the first item's message
   const weatherInfo = weatherItems[0]?.message || "";
   const temperatureMatch = weatherInfo.match(/temperature of (-?\d+\.?\d*)°C/);
   const temperature = temperatureMatch ? temperatureMatch[1] : null;
@@ -69,6 +69,7 @@ const WeatherSuggestions = ({
   const handleAddItem = (item: PackingItem) => {
     const quantity = quantities[item.id];
     const totalItemWeight = item.weight * quantity;
+    const existingItemIndex = selectedItems.findIndex(selected => selected.id === item.id);
     const newTotalWeight = totalWeight + totalItemWeight;
     
     if (newTotalWeight > travelDetails.weightLimit) {
@@ -87,7 +88,15 @@ const WeatherSuggestions = ({
       packed: false
     };
 
-    onAddItem(newItem);
+    if (existingItemIndex !== -1) {
+      // Update existing item's quantity
+      const updatedItems = [...selectedItems];
+      updatedItems[existingItemIndex] = newItem;
+      onAddItem(newItem);
+    } else {
+      onAddItem(newItem);
+    }
+
     toast({
       title: "Item Added",
       description: `Added ${quantity} ${item.name} to your bag`,
@@ -143,6 +152,7 @@ const WeatherSuggestions = ({
           {weatherItems.map((item) => {
             const isAdded = isItemAdded(item.id);
             const quantity = quantities[item.id] || 1;
+            const existingItem = selectedItems.find(selected => selected.id === item.id);
             
             return (
               <div key={item.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -151,13 +161,17 @@ const WeatherSuggestions = ({
                   <p className="text-sm text-gray-600">
                     Weight: {(item.weight * quantity).toFixed(1)} {travelDetails.unit}
                   </p>
+                  {existingItem && (
+                    <p className="text-sm text-green-600">
+                      Currently in bag: x{existingItem.quantity}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
                     variant="outline"
                     size="icon"
                     onClick={() => handleQuantityChange(item.id, -1)}
-                    disabled={isAdded}
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
@@ -166,17 +180,15 @@ const WeatherSuggestions = ({
                     variant="outline"
                     size="icon"
                     onClick={() => handleQuantityChange(item.id, 1)}
-                    disabled={isAdded}
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
                   <Button
                     variant={isAdded ? "secondary" : "default"}
-                    onClick={() => !isAdded && handleAddItem(item)}
-                    disabled={isAdded}
+                    onClick={() => handleAddItem(item)}
                     className="min-w-[100px]"
                   >
-                    {isAdded ? "Added" : "Add to Bag"}
+                    {isAdded ? "Update Bag" : "Add to Bag"}
                   </Button>
                 </div>
               </div>
