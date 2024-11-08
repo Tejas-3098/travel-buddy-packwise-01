@@ -7,8 +7,9 @@ export const convertWeight = (weight: number, from: "kg" | "lb", to: "kg" | "lb"
 
 export const calculateTotalWeight = (items: (EssentialItem | PackingItem)[], unit: "kg" | "lb"): number => {
   return items.reduce((total, item) => {
-    const weight = item.unit === unit ? item.weight : convertWeight(item.weight, item.unit, unit);
-    return total + weight;
+    const itemWeight = 'quantity' in item ? (item.weight * (item.quantity || 1)) : item.weight;
+    const convertedWeight = item.unit === unit ? itemWeight : convertWeight(itemWeight, item.unit, unit);
+    return total + convertedWeight;
   }, 0);
 };
 

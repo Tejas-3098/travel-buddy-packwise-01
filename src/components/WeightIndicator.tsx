@@ -1,4 +1,6 @@
 import { Progress } from "@/components/ui/progress";
+import { calculateTotalWeight } from "@/utils/calculations";
+import { PackingItem } from "@/types/types";
 
 interface WeightIndicatorProps {
   currentWeight: number;
