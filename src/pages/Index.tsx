@@ -29,7 +29,8 @@ const Index = () => {
         ...item,
         category: "weather",
         packed: false,
-        quantity: 1
+        quantity: 1,
+        message: data.message // Add the message from backend to the first item
       }));
 
       toast({
