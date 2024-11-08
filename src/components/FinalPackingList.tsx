@@ -31,22 +31,20 @@ const FinalPackingList = ({ items, onBack, onComplete }: FinalPackingListProps) 
         {items.map(item => (
           <Card
             key={item.id}
-            className={`p-4 cursor-pointer transition-all card-glass ${
+            className={`p-4 cursor-pointer transition-all ${
               packedItems.has(item.id)
-                ? "bg-green-50/90 border-t-green-500"
-                : ""
+                ? "bg-green-50 border-green-200"
+                : "hover:border-primary/50"
             }`}
             onClick={() => togglePacked(item.id)}
           >
             <div className="flex items-start justify-between">
               <div className="space-y-1">
-                <h3 className="font-medium text-primary">
-                  {item.name}
-                </h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="font-medium">{item.name}</h3>
+                <p className="text-sm text-gray-600">
                   Quantity: {item.quantity || 1}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-gray-600">
                   Weight: {item.weight * (item.quantity || 1)} {item.unit}
                 </p>
               </div>
@@ -59,17 +57,10 @@ const FinalPackingList = ({ items, onBack, onComplete }: FinalPackingListProps) 
       </div>
 
       <div className="flex justify-between pt-4">
-        <Button 
-          variant="outline" 
-          onClick={onBack}
-          className="hover:border-primary/50"
-        >
+        <Button variant="outline" onClick={onBack}>
           Back to Review
         </Button>
-        <Button 
-          onClick={onComplete}
-          className="bg-primary hover:bg-primary/90"
-        >
+        <Button onClick={onComplete}>
           Complete Packing
         </Button>
       </div>

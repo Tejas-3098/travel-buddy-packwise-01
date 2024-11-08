@@ -55,8 +55,8 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
 
   return (
     <div className="container max-w-4xl mx-auto p-6 space-y-8">
-      <Card className="p-6 space-y-6 card-glass">
-        <h2 className="text-2xl font-bold text-center">Select Your Activities</h2>
+      <Card className="p-6 space-y-6">
+        <h2 className="text-2xl font-bold text-center text-primary">Select Your Activities</h2>
         
         <WeightIndicator
           currentWeight={totalWeight}
@@ -65,14 +65,12 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
         />
 
         <div className="space-y-4">
-          <Label className="text-lg font-semibold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-            Essential Items
-          </Label>
+          <Label className="text-lg">Essential Items</Label>
           <div className="grid gap-2">
             {selectedItems
               .filter(item => item.category === "essential")
               .map(item => (
-                <div key={item.id} className="flex justify-between items-center p-3 rounded-lg card-glass">
+                <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow-sm">
                   <span className="font-medium">{item.name}</span>
                   <span className="text-gray-600">
                     {(item.weight * (item.quantity || 1)).toFixed(1)} {travelDetails.unit}
@@ -84,14 +82,12 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
 
         {selectedItems.some(item => item.category === "weather") && (
           <div className="space-y-4">
-            <Label className="text-lg font-semibold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-              Weather-Related Items
-            </Label>
+            <Label className="text-lg">Weather-Related Items</Label>
             <div className="grid gap-2">
               {selectedItems
                 .filter(item => item.category === "weather")
                 .map(item => (
-                  <div key={item.id} className="flex justify-between items-center p-3 rounded-lg card-glass">
+                  <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow-sm">
                     <div className="flex items-center gap-2">
                       <span className="font-medium">{item.name}</span>
                       {item.quantity > 1 && (
@@ -114,17 +110,10 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
         />
 
         <div className="flex justify-between pt-4">
-          <Button 
-            variant="outline" 
-            onClick={onBack}
-            className="hover:border-primary/50"
-          >
+          <Button variant="outline" onClick={onBack}>
             Back
           </Button>
-          <Button 
-            onClick={() => onNext(selectedItems)}
-            className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
-          >
+          <Button onClick={() => onNext(selectedItems)}>
             Review Packing List
           </Button>
         </div>
