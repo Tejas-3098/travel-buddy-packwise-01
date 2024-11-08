@@ -62,7 +62,13 @@ const WeatherSuggestions = ({
   };
 
   const handleRemoveItem = (itemId: string) => {
+    // Set quantity to 0 to trigger removal in parent component
     onAddItem({ ...selectedItems.find(item => item.id === itemId)!, quantity: 0 });
+    // Reset the quantity in local state
+    setQuantities(prev => ({
+      ...prev,
+      [itemId]: 1
+    }));
   };
 
   const isItemAdded = (itemId: string) => {

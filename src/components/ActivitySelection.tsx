@@ -16,6 +16,7 @@ interface ActivitySelectionProps {
 
 const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionProps) => {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
+  // Only include weather items that have a quantity greater than 0
   const [selectedItems, setSelectedItems] = useState<PackingItem[]>([
     ...travelDetails.essentials.map(item => ({
       ...item,
