@@ -17,7 +17,6 @@ interface ActivitySelectionProps {
 const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionProps) => {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
   
-  // Filter out weather items with quantity 0 (deleted items) and include only essential items and selected weather items
   const [selectedItems, setSelectedItems] = useState<PackingItem[]>([
     ...travelDetails.essentials.map(item => ({
       ...item,
@@ -26,7 +25,7 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
       quantity: 1,
     })),
     ...(travelDetails.weatherItems || [])
-      .filter(item => item.quantity !== 0) // Only include items that weren't deleted
+      .filter(item => item.quantity !== 0)
   ]);
 
   const handleActivityToggle = (activityId: string) => {
@@ -56,11 +55,6 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
 
   return (
     <div className="container max-w-4xl mx-auto p-6 space-y-8">
-      <div className="text-center space-y-4">
-        <h1 className="text-3xl font-bold text-primary">Travel Buddy</h1>
-        <p className="text-lg text-gray-600 italic">"Pack Smart, Travel Light, Adventure Right"</p>
-      </div>
-
       <Card className="p-6 space-y-6">
         <h2 className="text-2xl font-bold text-center text-primary">Select Your Activities</h2>
         
