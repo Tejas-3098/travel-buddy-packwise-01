@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
 import SplashScreen from "./components/SplashScreen";
 import AuthScreen from "./components/AuthScreen";
+import LogoutScreen from "./components/LogoutScreen";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,7 @@ const App = () => {
               path="/form"
               element={isAuthenticated ? <Index /> : <Navigate to="/auth" replace />}
             />
+            <Route path="/logout" element={<LogoutScreen />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>

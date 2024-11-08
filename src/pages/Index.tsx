@@ -1,167 +1,67 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import InitialForm from "@/components/InitialForm";
 import ActivitySelection from "@/components/ActivitySelection";
-import PackingListReview from "@/components/PackingListReview";
-import FinalPackingList from "@/components/FinalPackingList";
-import CompletionPage from "@/components/CompletionPage";
 import WeatherSuggestions from "@/components/WeatherSuggestions";
-import { PackingItem, TravelDetails } from "@/types/types";
-import { useToast } from "@/components/ui/use-toast";
-
-type Step = "initial" | "weather" | "activities" | "review" | "final" | "completion";
+import PackingListReview from "@/components/PackingListReview";
+import CompletionPage from "@/components/CompletionPage";
+import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Index = () => {
-  const [step, setStep] = useState<Step>("initial");
-  const [travelDetails, setTravelDetails] = useState<TravelDetails | null>(null);
-  const [selectedItems, setSelectedItems] = useState<PackingItem[]>([]);
-  const [weatherItems, setWeatherItems] = useState<PackingItem[]>([]);
-  const { toast } = useToast();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({
+    destination: "",
+    startDate: new Date(),
+    endDate: new Date(),
+  });
+  const navigate = useNavigate();
 
-  const fetchWeatherSuggestions = async (city: string, startDate: string, endDate: string) => {
+  const handleSignOut = async () => {
     try {
-      const response = await fetch(`http://localhost:5001/api/packing-suggestions?city=${encodeURIComponent(city)}&startDate=${startDate}&endDate=${endDate}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch weather suggestions');
-      }
-      const data = await response.json();
-      
-      const items: PackingItem[] = data.itemSuggestions.map((item: any) => ({
-        ...item,
-        category: "weather",
-        packed: false,
-        quantity: 1,
-        message: data.message // Add the message from backend to the first item
-      }));
-
-      toast({
-        title: "Weather Analysis",
-        description: data.message,
-      });
-
-      return items;
+      await supabase.auth.signOut();
+      navigate("/logout");
     } catch (error) {
-      console.error('Error fetching weather suggestions:', error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch weather-based suggestions. Please try again.",
-        variant: "destructive",
-      });
-      return [];
+      toast.error("Error signing out. Please try again.");
     }
   };
 
-  const handleInitialSubmit = async (details: TravelDetails) => {
-    const items = await fetchWeatherSuggestions(
-      details.destination,
-      details.startDate,
-      details.endDate
-    );
-    
-    setWeatherItems(items);
-    setTravelDetails({
-      ...details,
-      weatherItems: items
-    });
-    setSelectedItems(details.essentials.map(item => ({
-      ...item,
-      category: "essential" as const,
-      packed: false,
-      quantity: 1
-    })));
-    setStep("weather");
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return <InitialForm onNext={(data) => {
+          setFormData(data);
+          setCurrentStep(2);
+        }} formData={formData} />;
+      case 2:
+        return <ActivitySelection onNext={() => setCurrentStep(3)} onBack={() => setCurrentStep(1)} />;
+      case 3:
+        return <WeatherSuggestions onNext={() => setCurrentStep(4)} onBack={() => setCurrentStep(2)} destination={formData.destination} />;
+      case 4:
+        return <PackingListReview onNext={() => setCurrentStep(5)} onBack={() => setCurrentStep(3)} />;
+      case 5:
+        return <CompletionPage onBack={() => setCurrentStep(4)} />;
+      default:
+        return null;
+    }
   };
-
-  const handleAddWeatherItem = (item: PackingItem) => {
-    setSelectedItems(prev => {
-      const existingItemIndex = prev.findIndex(i => i.id === item.id);
-      
-      // If quantity is 0, remove the item
-      if (item.quantity === 0) {
-        return prev.filter(i => i.id !== item.id);
-      }
-
-      if (existingItemIndex !== -1) {
-        // Update existing item's quantity
-        const updatedItems = [...prev];
-        updatedItems[existingItemIndex] = {
-          ...updatedItems[existingItemIndex],
-          quantity: item.quantity
-        };
-        return updatedItems;
-      }
-      // Add new item
-      return [...prev, item];
-    });
-  };
-
-  const handleActivitySubmit = (items: PackingItem[]) => {
-    setSelectedItems(items);
-    setStep("review");
-  };
-
-  const handleReviewSubmit = (items: PackingItem[]) => {
-    setSelectedItems(items);
-    setStep("final");
-  };
-
-  const handleFinalComplete = () => {
-    setStep("completion");
-  };
-
-  if (!travelDetails && step !== "initial") {
-    return null;
-  }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-2">Travel Buddy</h1>
-          <p className="text-lg text-gray-600 italic">"Pack Smart, Travel Light, Adventure Right"</p>
-        </div>
-
-        {step === "initial" && (
-          <InitialForm onSubmit={handleInitialSubmit} />
-        )}
-        {step === "weather" && travelDetails && (
-          <WeatherSuggestions
-            weatherItems={weatherItems}
-            selectedItems={selectedItems}
-            travelDetails={travelDetails}
-            onAddItem={handleAddWeatherItem}
-            onNext={() => setStep("activities")}
-            onBack={() => setStep("initial")}
-          />
-        )}
-        {step === "activities" && travelDetails && (
-          <ActivitySelection
-            travelDetails={travelDetails}
-            onNext={handleActivitySubmit}
-            onBack={() => setStep("weather")}
-          />
-        )}
-        {step === "review" && travelDetails && (
-          <PackingListReview
-            items={selectedItems}
-            weightLimit={travelDetails.weightLimit}
-            unit={travelDetails.unit}
-            onNext={handleReviewSubmit}
-            onBack={() => setStep("activities")}
-          />
-        )}
-        {step === "final" && (
-          <FinalPackingList
-            items={selectedItems}
-            onBack={() => setStep("review")}
-            onComplete={handleFinalComplete}
-          />
-        )}
-        {step === "completion" && (
-          <CompletionPage
-            onBack={() => setStep("final")}
-          />
-        )}
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-end mb-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleSignOut}
+          className="flex items-center gap-2"
+        >
+          <LogOut className="w-4 h-4" />
+          Sign Out
+        </Button>
       </div>
+      {renderStep()}
     </div>
   );
 };
