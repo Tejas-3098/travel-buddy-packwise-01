@@ -57,6 +57,8 @@ const WeatherSuggestions = ({
     const typeLabel = type === "top" ? "Tops" : type === "bottom" ? "Bottoms" : "Shoes";
     const suggestedQuantity = type === "shoes" ? Math.min(3, tripDuration) : tripDuration;
     
+    if (items.length === 0) return null;
+
     return (
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-primary">
