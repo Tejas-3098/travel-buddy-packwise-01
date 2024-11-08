@@ -13,7 +13,7 @@ export interface Activity {
 
 export interface PackingItem extends EssentialItem {
   category: "essential" | "activity" | "weather";
-  type?: "top" | "bottom" | "shoes" | "accessory";
+  type?: "top" | "bottom" | "shoes" | "accessory" | "dress"; // Added "dress" here
   packed: boolean;
   quantity: number;
   suggestedQuantity?: number;
