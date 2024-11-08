@@ -39,14 +39,16 @@ const WeatherSuggestions = ({
   });
 
   const getWeatherIcon = (condition: string) => {
-    if (condition.toLowerCase().includes('sun') || condition.toLowerCase().includes('clear')) {
-      return <Sun className="h-6 w-6 text-yellow-500" />;
-    } else if (condition.toLowerCase().includes('rain')) {
-      return <CloudRain className="h-6 w-6 text-blue-500" />;
-    } else if (condition.toLowerCase().includes('snow')) {
-      return <Snowflake className="h-6 w-6 text-blue-300" />;
-    } else {
-      return <Cloud className="h-6 w-6 text-gray-500" />;
+    switch (condition.toLowerCase()) {
+      case 'sunny':
+      case 'clear':
+        return <Sun className="h-6 w-6 text-yellow-500" />;
+      case 'rainy':
+        return <CloudRain className="h-6 w-6 text-blue-500" />;
+      case 'snowy':
+        return <Snowflake className="h-6 w-6 text-blue-300" />;
+      default:
+        return <Cloud className="h-6 w-6 text-gray-500" />;
     }
   };
 
@@ -59,10 +61,10 @@ const WeatherSuggestions = ({
 
   const handleAddItem = (item: PackingItem) => {
     const quantity = quantities[item.id];
-    const itemWeight = item.weight * quantity;
-    const newWeight = totalWeight + itemWeight;
+    const totalItemWeight = item.weight * quantity;
+    const newTotalWeight = totalWeight + totalItemWeight;
     
-    if (newWeight > travelDetails.weightLimit) {
+    if (newTotalWeight > travelDetails.weightLimit) {
       toast({
         title: "Weight Limit Exceeded",
         description: `Adding this item would exceed your weight limit of ${travelDetails.weightLimit}${travelDetails.unit}`,
@@ -79,7 +81,6 @@ const WeatherSuggestions = ({
     };
 
     onAddItem(newItem);
-
     toast({
       title: "Item Added",
       description: `Added ${quantity} ${item.name} to your bag`,
@@ -171,7 +172,7 @@ const WeatherSuggestions = ({
         <Button variant="outline" onClick={onBack}>
           Back
         </Button>
-        <Button onClick={() => onNext()}>
+        <Button onClick={onNext}>
           Continue to Activities
         </Button>
       </div>

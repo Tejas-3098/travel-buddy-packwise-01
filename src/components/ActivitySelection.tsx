@@ -23,11 +23,7 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
       packed: false,
       quantity: 1,
     })),
-    ...(travelDetails.weatherItems || []).map(item => ({
-      ...item,
-      category: "weather" as const,
-      packed: false,
-    }))
+    ...(travelDetails.weatherItems || [])
   ]);
 
   const handleActivityToggle = (activityId: string) => {
@@ -79,7 +75,9 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
               .map(item => (
                 <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow-sm">
                   <span className="font-medium">{item.name}</span>
-                  <span className="text-gray-600">{item.weight} {item.unit}</span>
+                  <span className="text-gray-600">
+                    {(item.weight * (item.quantity || 1)).toFixed(1)} {travelDetails.unit}
+                  </span>
                 </div>
               ))}
           </div>
@@ -94,7 +92,7 @@ const ActivitySelection = ({ travelDetails, onNext, onBack }: ActivitySelectionP
                 <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow-sm">
                   <span className="font-medium">{item.name}</span>
                   <span className="text-gray-600">
-                    {(item.weight * (item.quantity || 1)).toFixed(1)} {item.unit}
+                    {(item.weight * (item.quantity || 1)).toFixed(1)} {travelDetails.unit}
                   </span>
                 </div>
               ))}

@@ -52,6 +52,15 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
   };
 
   const handleRemoveItem = (itemId: string) => {
+    const itemToRemove = items.find(item => item.id === itemId);
+    if (itemToRemove?.category === 'essential') {
+      toast({
+        title: "Cannot Remove Essential Item",
+        description: "Essential items cannot be removed from the packing list",
+        variant: "destructive",
+      });
+      return;
+    }
     setItems(items.filter(item => item.id !== itemId));
   };
 
