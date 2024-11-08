@@ -18,7 +18,10 @@ interface PackingListReviewProps {
 const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onBack }: PackingListReviewProps) => {
   const [items, setItems] = useState<PackingItem[]>(initialItems);
   const { toast } = useToast();
-  const totalWeight = calculateTotalWeight(items, unit);
+  const totalWeight = calculateTotalWeight(items.map(item => ({
+    ...item,
+    weight: item.weight * (item.quantity || 1)
+  })), unit);
 
   useEffect(() => {
     if (totalWeight > weightLimit) {
@@ -31,14 +34,13 @@ const PackingListReview = ({ items: initialItems, weightLimit, unit, onNext, onB
   }, [totalWeight, weightLimit, unit, toast]);
 
   const handleQuantityChange = (itemId: string, delta: number) => {
-    const updatedItems = items.map(item => {
+    setItems(prevItems => prevItems.map(item => {
       if (item.id === itemId) {
         const newQuantity = Math.max(1, (item.quantity || 1) + delta);
         return { ...item, quantity: newQuantity };
       }
       return item;
-    });
-    setItems(updatedItems);
+    }));
   };
 
   const handleRemoveItem = (itemId: string) => {

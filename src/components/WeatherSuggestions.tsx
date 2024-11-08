@@ -4,7 +4,6 @@ import WeightIndicator from "./WeightIndicator";
 import { PackingItem, TravelDetails } from "@/types/types";
 import { Plus } from "lucide-react";
 import { calculateTotalWeight } from "@/utils/calculations";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { motion } from "framer-motion";
 
 interface WeatherSuggestionsProps {
@@ -34,14 +33,18 @@ const WeatherSuggestions = ({
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg shadow-sm border border-blue-200"
       >
-        <Alert className="bg-gradient-to-r from-blue-50 to-blue-100">
-          <AlertDescription className="text-center py-4">
-            Based on the weather forecast for {travelDetails.destination}, 
-            the average temperature during your trip from {travelDetails.startDate} to {travelDetails.endDate} 
-            will be predominantly sunny with an average temperature of 25°C.
-          </AlertDescription>
-        </Alert>
+        <h3 className="text-lg font-semibold text-blue-800 mb-2">Weather Forecast</h3>
+        <p className="text-blue-700">
+          Your trip to <span className="font-semibold">{travelDetails.destination}</span>
+        </p>
+        <p className="text-blue-700 mt-1">
+          From {travelDetails.startDate} to {travelDetails.endDate}
+        </p>
+        <p className="text-blue-700 mt-2">
+          Expect predominantly sunny conditions with an average temperature of 25°C.
+        </p>
       </motion.div>
       
       <WeightIndicator
