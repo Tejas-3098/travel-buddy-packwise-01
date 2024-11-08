@@ -61,6 +61,10 @@ const WeatherSuggestions = ({
     onAddItem(newItem);
   };
 
+  const handleRemoveItem = (itemId: string) => {
+    onAddItem({ ...selectedItems.find(item => item.id === itemId)!, quantity: 0 });
+  };
+
   const isItemAdded = (itemId: string) => {
     return selectedItems.some(item => item.id === itemId);
   };
@@ -103,6 +107,7 @@ const WeatherSuggestions = ({
                 existingItem={existingItem}
                 onQuantityChange={handleQuantityChange}
                 onAddItem={handleAddItem}
+                onRemoveItem={handleRemoveItem}
               />
             );
           })}

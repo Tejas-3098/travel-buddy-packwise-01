@@ -74,6 +74,12 @@ const Index = () => {
   const handleAddWeatherItem = (item: PackingItem) => {
     setSelectedItems(prev => {
       const existingItemIndex = prev.findIndex(i => i.id === item.id);
+      
+      // If quantity is 0, remove the item
+      if (item.quantity === 0) {
+        return prev.filter(i => i.id !== item.id);
+      }
+
       if (existingItemIndex !== -1) {
         // Update existing item's quantity
         const updatedItems = [...prev];

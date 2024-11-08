@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, Trash2 } from "lucide-react";
 import { PackingItem } from "@/types/types";
 
 interface WeatherItemProps {
@@ -10,6 +10,7 @@ interface WeatherItemProps {
   existingItem?: PackingItem;
   onQuantityChange: (itemId: string, delta: number) => void;
   onAddItem: (item: PackingItem) => void;
+  onRemoveItem: (itemId: string) => void;
 }
 
 const WeatherItem = ({
@@ -20,6 +21,7 @@ const WeatherItem = ({
   existingItem,
   onQuantityChange,
   onAddItem,
+  onRemoveItem,
 }: WeatherItemProps) => {
   return (
     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -50,13 +52,23 @@ const WeatherItem = ({
         >
           <Plus className="h-4 w-4" />
         </Button>
-        <Button
-          variant={isAdded ? "secondary" : "default"}
-          onClick={() => onAddItem(item)}
-          className="min-w-[100px]"
-        >
-          {isAdded ? "Update Bag" : "Add to Bag"}
-        </Button>
+        {isAdded ? (
+          <Button
+            variant="destructive"
+            size="icon"
+            onClick={() => onRemoveItem(item.id)}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        ) : (
+          <Button
+            variant="default"
+            onClick={() => onAddItem(item)}
+            className="min-w-[100px]"
+          >
+            Add to Bag
+          </Button>
+        )}
       </div>
     </div>
   );
