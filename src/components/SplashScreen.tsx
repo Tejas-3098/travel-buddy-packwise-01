@@ -21,37 +21,70 @@ const SplashScreen = () => {
         transition={{ duration: 0.5 }}
         className="text-center"
       >
-        <div className="mb-8 relative w-[200px] h-[200px]">
+        <div className="mb-8 relative w-[300px] h-[300px]">
           {/* Suitcase */}
           <motion.svg
-            width="100"
-            height="100"
+            width="80"
+            height="80"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute left-0 bottom-0"
-            initial={{ x: 0, y: 0 }}
-            animate={{ x: 100, y: -100 }}
-            transition={{ duration: 2, ease: "easeOut" }}
+            className="absolute left-1/2 bottom-1/2 transform -translate-x-1/2"
+            initial={{ y: 0, scale: 1 }}
+            animate={{ 
+              y: [-10, -100],
+              scale: [1, 0.6],
+              opacity: [1, 0.8]
+            }}
+            transition={{ 
+              duration: 2,
+              ease: "easeOut",
+              times: [0, 1]
+            }}
           >
-            <rect x="4" y="7" width="16" height="13" stroke="white" strokeWidth="2" fill="none" />
+            <rect x="4" y="7" width="16" height="13" rx="2" stroke="white" strokeWidth="2" fill="none" />
             <path d="M8 7V4C8 3.44772 8.44772 3 9 3H15C15.5523 3 16 3.44772 16 4V7" stroke="white" strokeWidth="2" />
+            <path d="M7 11H17M7 15H17" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
           </motion.svg>
 
           {/* Airplane */}
           <motion.svg
-            width="100"
-            height="100"
+            width="120"
+            height="120"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute left-0 bottom-0"
-            initial={{ x: -50, y: 50, rotate: 0, opacity: 0 }}
-            animate={{ x: 200, y: -100, rotate: 45, opacity: 1 }}
-            transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
+            className="absolute left-0 bottom-1/2"
+            initial={{ 
+              x: -50,
+              y: 50,
+              scale: 0.5,
+              opacity: 0,
+              rotate: 15
+            }}
+            animate={{ 
+              x: 300,
+              y: -100,
+              scale: 1,
+              opacity: [0, 1, 1, 0],
+              rotate: 15
+            }}
+            transition={{ 
+              duration: 2.5,
+              delay: 0.3,
+              ease: "easeOut",
+              opacity: { times: [0, 0.2, 0.8, 1] }
+            }}
           >
             <path
-              d="M4 19L17 6M17 6H8M17 6V15"
+              d="M3 8L7 12M7 12L3 16M7 12H21"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M16 8L18 6L21 9L19 11M16 16L18 18L21 15L19 13"
               stroke="white"
               strokeWidth="2"
               strokeLinecap="round"
