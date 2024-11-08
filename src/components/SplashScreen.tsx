@@ -15,18 +15,12 @@ const SplashScreen = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500">
-      <motion.div
-        initial={{ scale: 0.5, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.5, opacity: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center"
-      >
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 overflow-hidden">
+      <motion.div className="text-center">
         <motion.div
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 0 }}
-          transition={{ delay: 2, duration: 0.5 }}
+          initial={{ x: -100, opacity: 1 }}
+          animate={{ x: window.innerWidth }}
+          transition={{ duration: 2, ease: "easeInOut" }}
           className="mb-8"
         >
           <Luggage className="w-24 h-24 text-white" />
