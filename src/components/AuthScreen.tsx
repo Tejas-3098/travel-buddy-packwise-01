@@ -39,7 +39,6 @@ const AuthScreen = () => {
       className="min-h-screen flex items-center justify-center bg-background p-4"
     >
       <Card className="w-full max-w-md p-6">
-        {/* App Title */}
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-primary mb-2">Travel Buddy</h1>
           <p className="text-muted-foreground">Your Smart Packing Assistant</p>
@@ -112,37 +111,37 @@ const AuthScreen = () => {
               </Button>
             </div>
           </TabsContent>
-        </Tabs>
 
-        <div className="mt-6 space-y-4">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+          <div className="mt-6 space-y-4">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <Button
+                variant="outline"
+                onClick={() => handleSocialLogin("Google")}
+                className="flex items-center justify-center"
+              >
+                <FaGoogle className="mr-2 text-red-500" /> Google
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleSocialLogin("Facebook")}
+                className="flex items-center justify-center"
+              >
+                <FaFacebook className="mr-2 text-blue-600" /> Facebook
+              </Button>
             </div>
           </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <Button
-              variant="outline"
-              onClick={() => handleSocialLogin("Google")}
-              className="flex items-center justify-center"
-            >
-              <FaGoogle className="mr-2" /> Google
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleSocialLogin("Facebook")}
-              className="flex items-center justify-center"
-            >
-              <FaFacebook className="mr-2" /> Facebook
-            </Button>
-          </div>
-        </div>
+        </Tabs>
       </Card>
     </motion.div>
   );
