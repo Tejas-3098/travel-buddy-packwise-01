@@ -45,8 +45,10 @@ const Index = () => {
     queryFn: fetchWeatherSuggestions,
     enabled: currentStep === 2 && Boolean(travelDetails.destination) && Boolean(travelDetails.startDate) && Boolean(travelDetails.endDate),
     retry: 2,
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onSettled: (_, error: Error | null) => {
+      if (error) {
+        toast.error(error.message || 'Failed to fetch weather data. Please try again.');
+      }
     }
   });
 
