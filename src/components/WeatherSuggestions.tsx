@@ -6,6 +6,7 @@ import { PackingItem, TravelDetails } from "@/types/types";
 import { calculateTotalWeight } from "@/utils/calculations";
 import WeatherForecast from "./weather/WeatherForecast";
 import WeatherItem from "./weather/WeatherItem";
+import { Loader2 } from "lucide-react";
 
 interface WeatherSuggestionsProps {
   weatherItems: PackingItem[];
@@ -14,23 +15,23 @@ interface WeatherSuggestionsProps {
   onAddItem: (item: PackingItem) => void;
   onNext: () => void;
   onBack: () => void;
+  isLoading?: boolean;
+  weatherMessage?: string;
 }
 
 const WeatherSuggestions = ({
-  weatherItems: initialWeatherItems,
+  weatherItems,
   selectedItems,
   travelDetails,
   onAddItem,
   onNext,
   onBack,
+  isLoading = false,
+  weatherMessage = "",
 }: WeatherSuggestionsProps) => {
-  const [weatherItems, setWeatherItems] = useState(initialWeatherItems);
-  const totalWeight = calculateTotalWeight(selectedItems, travelDetails.unit);
-  
-  // Track which items have been added to the bag
   const [addedItems, setAddedItems] = useState<Record<string, PackingItem>>({});
-  
   const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const totalWeight = calculateTotalWeight(selectedItems, travelDetails.unit);
 
   const handleQuantityChange = (itemId: string, delta: number) => {
     setQuantities(prev => ({
@@ -79,26 +80,28 @@ const WeatherSuggestions = ({
     onAddItem({ ...addedItems[itemId], quantity: 0 });
   };
 
-  const handleNext = () => {
-    travelDetails.weatherItems = Object.values(addedItems);
-    onNext();
-  };
-
   const isItemAdded = (itemId: string) => {
     return itemId in addedItems;
   };
 
-  const weatherInfo = weatherItems[0]?.message || "";
-  const temperatureMatch = weatherInfo.match(/temperature of (-?\d+\.?\d*)°C/);
-  const temperature = temperatureMatch ? temperatureMatch[1] : null;
+  if (isLoading) {
+    return (
+      <Card className="p-6 max-w-2xl mx-auto">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-lg text-gray-600">Loading weather information...</p>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="p-6 max-w-2xl mx-auto space-y-6">
       <h2 className="text-2xl font-bold text-center text-primary">Weather-Based Suggestions</h2>
       
       <WeatherForecast
-        weatherInfo={weatherInfo}
-        temperature={temperature}
+        weatherInfo={weatherMessage}
+        temperature={null}
         travelDetails={travelDetails}
       />
       
@@ -110,32 +113,36 @@ const WeatherSuggestions = ({
 
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-primary">Suggested Items</h3>
-        <div className="grid gap-4">
-          {weatherItems.map((item) => {
-            const isAdded = isItemAdded(item.id);
-            const quantity = quantities[item.id] || 1;
-            
-            return (
-              <WeatherItem
-                key={item.id}
-                item={item}
-                quantity={quantity}
-                unit={travelDetails.unit}
-                isAdded={isAdded}
-                onQuantityChange={handleQuantityChange}
-                onAddItem={handleAddItem}
-                onRemoveItem={handleRemoveItem}
-              />
-            );
-          })}
-        </div>
+        {weatherItems.length === 0 ? (
+          <p className="text-gray-600 text-center py-4">No items suggested for the current weather conditions.</p>
+        ) : (
+          <div className="grid gap-4">
+            {weatherItems.map((item) => {
+              const isAdded = isItemAdded(item.id);
+              const quantity = quantities[item.id] || 1;
+              
+              return (
+                <WeatherItem
+                  key={item.id}
+                  item={item}
+                  quantity={quantity}
+                  unit={travelDetails.unit}
+                  isAdded={isAdded}
+                  onQuantityChange={handleQuantityChange}
+                  onAddItem={handleAddItem}
+                  onRemoveItem={handleRemoveItem}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <div className="flex justify-between pt-4">
         <Button variant="outline" onClick={onBack}>
           Back
         </Button>
-        <Button onClick={handleNext}>
+        <Button onClick={onNext}>
           Continue to Activities
         </Button>
       </div>

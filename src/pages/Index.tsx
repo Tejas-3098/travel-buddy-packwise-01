@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { PackingItem, TravelDetails } from "@/types/types";
+import { useQuery } from "@tanstack/react-query";
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -24,6 +25,26 @@ const Index = () => {
   });
   const [packingItems, setPackingItems] = useState<PackingItem[]>([]);
   const navigate = useNavigate();
+
+  const fetchWeatherSuggestions = async () => {
+    try {
+      const response = await fetch(`/api/packing-suggestions?city=${travelDetails.destination}&startDate=${travelDetails.startDate}&endDate=${travelDetails.endDate}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch weather data');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      toast.error("Failed to fetch weather data. Please try again.");
+      throw error;
+    }
+  };
+
+  const { data: weatherData, isLoading: isWeatherLoading } = useQuery({
+    queryKey: ['weather', travelDetails.destination, travelDetails.startDate, travelDetails.endDate],
+    queryFn: fetchWeatherSuggestions,
+    enabled: currentStep === 2 && !!travelDetails.destination && !!travelDetails.startDate && !!travelDetails.endDate
+  });
 
   const handleSignOut = async () => {
     try {
@@ -48,7 +69,7 @@ const Index = () => {
       case 2:
         return (
           <WeatherSuggestions
-            weatherItems={[]}
+            weatherItems={weatherData?.itemSuggestions || []}
             selectedItems={packingItems}
             travelDetails={travelDetails}
             onAddItem={(item: PackingItem) => {
@@ -56,6 +77,8 @@ const Index = () => {
             }}
             onNext={() => setCurrentStep(3)}
             onBack={() => setCurrentStep(1)}
+            isLoading={isWeatherLoading}
+            weatherMessage={weatherData?.message}
           />
         );
       case 3:
