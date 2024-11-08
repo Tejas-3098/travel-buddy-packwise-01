@@ -7,7 +7,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaGoogle } from "react-icons/fa";
 
 const AuthScreen = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +15,6 @@ const AuthScreen = () => {
   const navigate = useNavigate();
 
   const handleSocialLogin = (provider: string) => {
-    // TODO: Implement social login
     toast({
       title: "Coming Soon",
       description: `${provider} login will be implemented soon!`,
@@ -24,7 +22,6 @@ const AuthScreen = () => {
   };
 
   const handleEmailAuth = (type: "login" | "register") => {
-    // TODO: Implement email authentication
     toast({
       title: "Success!",
       description: "Authentication successful",
@@ -130,7 +127,7 @@ const AuthScreen = () => {
                 onClick={() => handleSocialLogin("Google")}
                 className="flex items-center justify-center"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48" className="mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48" className="mr-2">
                   <path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/>
                   <path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.32-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/>
                   <path fill="#FBBC05" d="M11.68 28.18c-.44-1.32-.69-2.73-.69-4.18s.25-2.86.69-4.18v-5.7H4.34A21.907 21.907 0 0 0 2 24c0 3.54.85 6.89 2.34 9.88l7.34-5.7z"/>
@@ -143,7 +140,7 @@ const AuthScreen = () => {
                 onClick={() => handleSocialLogin("Facebook")}
                 className="flex items-center justify-center"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48" className="mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48" className="mr-2">
                   <path fill="#3F51B5" d="M42,37c0,2.762-2.238,5-5,5H11c-2.762,0-5-2.238-5-5V11c0-2.762,2.238-5,5-5h26c2.762,0,5,2.238,5,5V37z"/>
                   <path fill="#FFFFFF" d="M34.368,25H31v13h-5V25h-3v-4h3v-2.41c0.002-3.508,1.459-5.59,5.592-5.59H35v4h-2.287C31.104,17,31,17.6,31,18.723V21h4L34.368,25z"/>
                 </svg>
