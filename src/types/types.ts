@@ -17,6 +17,7 @@ export interface PackingItem extends EssentialItem {
   packed: boolean;
   quantity: number;
   suggestedQuantity?: number;
+  message?: string;  // Added this optional property
 }
 
 export interface TravelDetails {
