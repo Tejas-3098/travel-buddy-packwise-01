@@ -28,16 +28,20 @@ const Index = () => {
 
   const fetchWeatherSuggestions = async () => {
     try {
+      const baseUrl = import.meta.env.PROD ? '' : 'http://localhost:3000';
       const response = await fetch(
-        `/api/packing-suggestions?city=${encodeURIComponent(travelDetails.destination)}&startDate=${travelDetails.startDate}&endDate=${travelDetails.endDate}`
+        `${baseUrl}/api/packing-suggestions?city=${encodeURIComponent(travelDetails.destination)}&startDate=${travelDetails.startDate}&endDate=${travelDetails.endDate}`
       );
       
       if (!response.ok) {
         const errorText = await response.text();
+        console.error('API Error Response:', errorText);
         throw new Error(`Failed to fetch weather data: ${errorText}`);
       }
       
       const data = await response.json();
+      console.log('Weather API Response:', data);
+      
       if (data.error) {
         throw new Error(data.error);
       }
@@ -101,6 +105,7 @@ const Index = () => {
             onBack={() => setCurrentStep(1)}
             isLoading={isWeatherLoading}
             weatherMessage={weatherData?.message}
+            temperature={weatherData?.temperature}
           />
         );
       case 3:
