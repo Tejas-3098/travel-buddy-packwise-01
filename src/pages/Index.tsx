@@ -27,23 +27,24 @@ const Index = () => {
   const navigate = useNavigate();
 
   const fetchWeatherSuggestions = async () => {
-    try {
-      const response = await fetch(`/api/packing-suggestions?city=${travelDetails.destination}&startDate=${travelDetails.startDate}&endDate=${travelDetails.endDate}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch weather data');
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      toast.error("Failed to fetch weather data. Please try again.");
-      throw error;
+    const response = await fetch(
+      `/api/packing-suggestions?city=${encodeURIComponent(travelDetails.destination)}&startDate=${travelDetails.startDate}&endDate=${travelDetails.endDate}`
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to fetch weather data');
     }
+    return response.json();
   };
 
-  const { data: weatherData, isLoading: isWeatherLoading } = useQuery({
+  const { data: weatherData, isLoading: isWeatherLoading, error } = useQuery({
     queryKey: ['weather', travelDetails.destination, travelDetails.startDate, travelDetails.endDate],
     queryFn: fetchWeatherSuggestions,
-    enabled: currentStep === 2 && !!travelDetails.destination && !!travelDetails.startDate && !!travelDetails.endDate
+    enabled: currentStep === 2 && Boolean(travelDetails.destination) && Boolean(travelDetails.startDate) && Boolean(travelDetails.endDate),
+    retry: 2,
+    onError: (error) => {
+      toast.error(error.message || 'Failed to fetch weather data. Please try again.');
+    }
   });
 
   const handleSignOut = async () => {
@@ -73,7 +74,19 @@ const Index = () => {
             selectedItems={packingItems}
             travelDetails={travelDetails}
             onAddItem={(item: PackingItem) => {
-              setPackingItems([...packingItems, item]);
+              if (item.quantity === 0) {
+                setPackingItems(prev => prev.filter(i => i.id !== item.id));
+              } else {
+                setPackingItems(prev => {
+                  const existingIndex = prev.findIndex(i => i.id === item.id);
+                  if (existingIndex >= 0) {
+                    const newItems = [...prev];
+                    newItems[existingIndex] = item;
+                    return newItems;
+                  }
+                  return [...prev, item];
+                });
+              }
             }}
             onNext={() => setCurrentStep(3)}
             onBack={() => setCurrentStep(1)}

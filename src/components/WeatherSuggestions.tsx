@@ -100,7 +100,7 @@ const WeatherSuggestions = ({
       <h2 className="text-2xl font-bold text-center text-primary">Weather-Based Suggestions</h2>
       
       <WeatherForecast
-        weatherInfo={weatherMessage}
+        weatherInfo={weatherMessage || "No weather information available"}
         temperature={null}
         travelDetails={travelDetails}
       />
