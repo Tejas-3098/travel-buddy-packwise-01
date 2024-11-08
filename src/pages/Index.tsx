@@ -44,10 +44,7 @@ const Index = () => {
     queryKey: ['weather', travelDetails.destination, travelDetails.startDate, travelDetails.endDate],
     queryFn: fetchWeatherSuggestions,
     enabled: currentStep === 2 && Boolean(travelDetails.destination) && Boolean(travelDetails.startDate) && Boolean(travelDetails.endDate),
-    retry: 2,
-    onError: (error: Error) => {
-      toast.error(error.message || 'Failed to fetch weather data. Please try again.');
-    }
+    retry: 2
   });
 
   const handleSignOut = async () => {
@@ -144,7 +141,6 @@ const Index = () => {
       {renderStep()}
     </div>
   );
-
 };
 
 export default Index;
