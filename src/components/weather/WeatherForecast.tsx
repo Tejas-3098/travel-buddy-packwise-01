@@ -41,12 +41,14 @@ const WeatherForecast = ({ weatherInfo, temperature, travelDetails }: WeatherFor
           <p className="text-blue-700 mt-1">
             From {new Date(travelDetails.startDate).toLocaleDateString()} to {new Date(travelDetails.endDate).toLocaleDateString()}
           </p>
-          <div className="flex items-center gap-2 mt-3">
-            <Thermometer className="h-5 w-5 text-red-500" />
-            <span className="text-lg font-medium text-blue-800">
-              {temperature ? `${temperature}°C` : "Temperature not available"}
-            </span>
-          </div>
+          {temperature && (
+            <div className="flex items-center gap-2 mt-3">
+              <Thermometer className="h-5 w-5 text-red-500" />
+              <span className="text-lg font-medium text-blue-800">
+                {temperature}°C
+              </span>
+            </div>
+          )}
           <p className="text-blue-700 mt-2 font-medium">
             {weatherInfo || "Loading weather information..."}
           </p>

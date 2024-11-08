@@ -31,9 +31,12 @@ const Index = () => {
       const response = await fetch(
         `/api/packing-suggestions?city=${encodeURIComponent(travelDetails.destination)}&startDate=${travelDetails.startDate}&endDate=${travelDetails.endDate}`
       );
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch weather data');
+        const errorText = await response.text();
+        throw new Error(`Failed to fetch weather data: ${errorText}`);
       }
+      
       const data = await response.json();
       if (data.error) {
         throw new Error(data.error);
