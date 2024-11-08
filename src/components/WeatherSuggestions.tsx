@@ -1,9 +1,9 @@
-import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import WeightIndicator from "./WeightIndicator";
 import { PackingItem, TravelDetails } from "@/types/types";
 import { calculateTotalWeight } from "@/utils/calculations";
+import { useState } from "react";
 import WeatherForecast from "./weather/WeatherForecast";
 import WeatherItem from "./weather/WeatherItem";
 
@@ -17,14 +17,13 @@ interface WeatherSuggestionsProps {
 }
 
 const WeatherSuggestions = ({
-  weatherItems: initialWeatherItems,
+  weatherItems,
   selectedItems,
   travelDetails,
   onAddItem,
   onNext,
   onBack,
 }: WeatherSuggestionsProps) => {
-  const [weatherItems, setWeatherItems] = useState(initialWeatherItems);
   const totalWeight = calculateTotalWeight(selectedItems, travelDetails.unit);
   
   const [quantities, setQuantities] = useState<Record<string, number>>(() => {
@@ -63,20 +62,13 @@ const WeatherSuggestions = ({
   };
 
   const handleRemoveItem = (itemId: string) => {
-    // Remove the item from the suggested items list
-    setWeatherItems(prev => prev.filter(item => item.id !== itemId));
-    
-    // Remove the item from selected items (if it was added)
-    if (isItemAdded(itemId)) {
-      onAddItem({ ...selectedItems.find(item => item.id === itemId)!, quantity: 0 });
-    }
-    
+    // Set quantity to 0 to trigger removal in parent component
+    onAddItem({ ...selectedItems.find(item => item.id === itemId)!, quantity: 0 });
     // Reset the quantity in local state
-    setQuantities(prev => {
-      const newQuantities = { ...prev };
-      delete newQuantities[itemId];
-      return newQuantities;
-    });
+    setQuantities(prev => ({
+      ...prev,
+      [itemId]: 1
+    }));
   };
 
   const isItemAdded = (itemId: string) => {
