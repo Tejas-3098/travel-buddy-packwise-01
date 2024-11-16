@@ -40,7 +40,7 @@ This project was developed during the **Boston AI Hackathon** hosted by Vylero.
 
 ## Deployed Application
 
-Check out the live app here: [Travel Buddy: Packwise](https://travel-buddy-packwise-final.vercel.app)
+Check out the live app deployed on Vercel here: [Travel Buddy - Packwise](https://travel-buddy-packwise-final.vercel.app)
 
 ---
 
