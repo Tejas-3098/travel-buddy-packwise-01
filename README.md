@@ -4,6 +4,10 @@ An AI-powered travel companion that takes the guesswork out of packing! **SmartP
 
 This project was developed during the **Boston AI Hackathon** hosted by Vylero.
 
+## Deployed Application
+
+Check out the live app deployed on Vercel here: [Travel Buddy - Packwise](https://travel-buddy-packwise-final.vercel.app)
+
 ## Technologies Used
 
 - **React**: For building the user interface.
@@ -38,9 +42,6 @@ This project was developed during the **Boston AI Hackathon** hosted by Vylero.
 5. **Access the application**:
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Deployed Application
-
-Check out the live app deployed on Vercel here: [Travel Buddy - Packwise](https://travel-buddy-packwise-final.vercel.app)
 
 ---
 
