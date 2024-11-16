@@ -2,7 +2,7 @@
 
 An AI-powered travel companion that takes the guesswork out of packing! **SmartPack** plans your packing list based on weather, trip duration, and luggage weight – so you’re always ready to go with everything you need (and nothing you don’t). It uses the **OpenWeather API** to get real-time weather data of the destination location for the user-specified travel dates. 
 
-This project was developed during the **Boston AI Hackathon** hosted by Vylero.
+This project was developed during the **Hack Boston AI** hosted by Vylero.
 
 ## Deployed Application
 
